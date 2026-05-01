@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cine Colombia — Tu cine en Colombia</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Poppins',sans-serif;background:#F2F2F2;color:#0D0D0D;overflow-x:hidden;line-height:1.5}
+img{display:block;max-width:100%}
+button,a{cursor:pointer;font-family:'Poppins',sans-serif;text-decoration:none}
+
+/* ── VARIABLES ── */
+:root{
+  --pu:#1438A6;--pu2:#2952D4;--pu3:#0E2880;
+  --gr:#2952D4;--pi:#0E2880;
+  --grad:linear-gradient(135deg,#1438A6 0%,#2952D4 50%,#0E2880 100%);
+  --grad2:linear-gradient(135deg,#2952D4,#1438A6);
+  --grad3:linear-gradient(135deg,#1438A6,#2952D4);
+  --shadow:0 4px 24px rgba(20,56,166,.22);
+  --shadow2:0 8px 40px rgba(20,56,166,.32);
+  --r:18px;--r2:12px;--r3:50px;
+  --bg:#F2F2F2;--card:#FFFFFF;
+  --text:#0D0D0D;--text2:#3a3a4a;--text3:#7a7a8a;
+  --border:rgba(20,56,166,.14);
+}
+
+/* ── NAV ── */
+.navbar{
+  position:sticky;top:0;z-index:999;
+  background:var(--grad);
+  padding:0 2rem;height:64px;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  box-shadow:0 4px 24px rgba(20,56,166,.40);
+}
+.nav-logo img{height:38px;object-fit:contain;filter:brightness(10)}
+.nav-links{display:flex;align-items:center;gap:.25rem;list-style:none}
+.nav-links a{
+  color:rgba(255,255,255,.85);font-size:.88rem;font-weight:600;
+  padding:.45rem 1rem;border-radius:var(--r3);
+  transition:all .2s;
+}
+.nav-links a:hover,.nav-links a.on{color:#fff;background:rgba(255,255,255,.18)}
+.nav-right{display:flex;align-items:center;gap:.65rem}
+.nav-search{
+  display:flex;align-items:center;
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:var(--r3);padding:.4rem 1rem;gap:.5rem;
+}
+.nav-search input{
+  background:none;border:none;outline:none;color:#fff;
+  font-family:'Poppins',sans-serif;font-size:.82rem;width:160px;
+}
+.nav-search input::placeholder{color:rgba(255,255,255,.6)}
+.nav-search svg{opacity:.7;flex-shrink:0}
+.btn-nav{
+  background:rgba(255,255,255,.22);color:#fff;border:1.5px solid rgba(255,255,255,.4);
+  border-radius:var(--r3);padding:.45rem 1.25rem;font-size:.83rem;font-weight:700;
+  transition:all .2s;
+}
+.btn-nav:hover{background:rgba(255,255,255,.35)}
+.hambtn{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:6px}
+.hambtn span{width:22px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
+
+/* Mobile nav */
+.mobnav{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+.mobnav.open{display:block}
+.mobnav-panel{
+  position:absolute;top:0;right:0;bottom:0;width:280px;
+  background:#fff;padding:2rem 1.5rem;display:flex;flex-direction:column;gap:.4rem;
+  animation:slideIn .25s ease;
+}
+@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.mobnav-panel a{font-size:.95rem;font-weight:600;color:var(--text2);padding:.7rem 1rem;border-radius:12px;display:block;transition:all .18s}
+.mobnav-panel a:hover{color:var(--pu);background:#dde4f5}
+.mob-logo{height:36px;margin-bottom:1rem}
+.mob-x{position:absolute;top:.9rem;right:.9rem;width:32px;height:32px;border-radius:50%;background:#dde4f5;border:none;color:var(--pu);font-size:.85rem;display:flex;align-items:center;justify-content:center}
+
+/* ── PAGES ── */
+.pg{display:none}
+.pg.on{display:block;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO CAROUSEL ── */
+.hero-carousel{
+  position:relative;overflow:hidden;
+  min-height:420px;background:#0D0D0D;
+  display:flex;align-items:stretch;
+}
+.hero-track{
+  display:flex;width:100%;
+  transition:transform .6s cubic-bezier(.77,0,.18,1);
+}
+.hero-slide{
+  min-width:100%;display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:stretch;position:relative;
+}
+@media(max-width:768px){
+  .hero-carousel{min-height:unset}
+  .hero-slide{grid-template-columns:1fr;grid-template-rows:auto 200px}
+  .hero-slide-right{height:200px;display:block!important}
+  .hero-slide-left{padding:1.5rem 1.25rem}
+  .hero-title{font-size:1.3rem!important}
+  .hero-desc{font-size:.78rem;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+}
+.hero-slide-left{
+  padding:3rem 2.5rem 3rem 3rem;
+  display:flex;flex-direction:column;justify-content:center;
+  position:relative;z-index:2;
+  background:linear-gradient(135deg,#1438A6 0%,#2952D4 55%,#0D0D0D 100%);
+}
+.hero-slide-left::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.hero-slide-right{
+  position:relative;overflow:hidden;
+}
+.hero-slide-right img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .7s ease;
+}
+.hero-slide:hover .hero-slide-right img{transform:scale(1.04)}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);
+  color:#fff;border-radius:var(--r3);padding:5px 14px;
+  font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1rem;
+  width:fit-content;
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero-title{
+  font-size:clamp(1.6rem,4vw,2.8rem);font-weight:900;color:#fff;
+  line-height:1.1;margin-bottom:.85rem;text-transform:uppercase;
+  text-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+.hero-desc{font-size:.88rem;color:rgba(255,255,255,.85);line-height:1.7;max-width:460px;margin-bottom:1.75rem}
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap;position:relative;z-index:1}
+.btn-hero{
+  background:#fff;color:var(--pu);border:none;border-radius:var(--r3);
+  padding:.75rem 2rem;font-size:.9rem;font-weight:700;
+  transition:all .22s;box-shadow:0 4px 18px rgba(0,0,0,.2);
+}
+.btn-hero:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.28)}
+.btn-hero2{
+  background:rgba(255,255,255,.18);color:#fff;
+  border:1.5px solid rgba(255,255,255,.4);border-radius:var(--r3);
+  padding:.75rem 2rem;font-size:.9rem;font-weight:600;
+  transition:all .22s;
+}
+.btn-hero2:hover{background:rgba(255,255,255,.3)}
+
+/* Carousel nav arrows */
+.caro-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:10;width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);
+  color:#fff;font-size:1.1rem;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;backdrop-filter:blur(6px);
+}
+.caro-arrow:hover{background:rgba(255,255,255,.35);transform:translateY(-50%) scale(1.08)}
+.caro-prev{left:1.1rem}
+.caro-next{right:1.1rem}
+
+/* Dots */
+.caro-dots{
+  position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);
+  display:flex;gap:.45rem;z-index:10;
+}
+.cdot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.4);border:none;cursor:pointer;
+  transition:all .25s;padding:0;
+}
+.cdot.on{background:#fff;width:22px;border-radius:4px}
+
+/* ── SECTION LAYOUT ── */
+.sec{max-width:1280px;margin:0 auto;padding:2.5rem 1.5rem}
+.sec-title{font-size:1.5rem;font-weight:800;color:var(--text);margin-bottom:.25rem}
+.sec-sub{font-size:.84rem;color:var(--text2);margin-bottom:1.75rem}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem}
+.sec-head .sec-title{margin-bottom:0}
+.ver-mas{font-size:.82rem;font-weight:600;color:var(--pu);display:flex;align-items:center;gap:.3rem;transition:gap .2s}
+.ver-mas:hover{gap:.6rem}
+
+/* ── FEATURED (2 big) ── */
+.featured-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+
+/* ── MOVIE CARD ── */
+.mcard{
+  background:var(--card);border-radius:var(--r);
+  box-shadow:0 2px 16px rgba(20,56,166,.08);
+  overflow:hidden;transition:all .25s;position:relative;
+  display:flex;flex-direction:column;border:1px solid var(--border);
+}
+.mcard:hover{transform:translateY(-6px);box-shadow:var(--shadow2)}
+.mcard-img{position:relative;overflow:hidden;aspect-ratio:2/3;background:#e8e0f5}
+.mcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.mcard:hover .mcard-img img{transform:scale(1.07)}
+.mcard-badge{
+  position:absolute;top:10px;left:10px;
+  border-radius:var(--r3);padding:3px 10px;
+  font-size:.62rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;
+  backdrop-filter:blur(8px);
+}
+.badge-cartelera{background:linear-gradient(135deg,#1438A6,#2952D4);color:#fff}
+.badge-pronto{background:rgba(2, 2, 2, 0.85);color:#fff}
+.badge-estreno{background:linear-gradient(135deg,#ff9100,#ff9100);color:#fff}
+.badge-preventa{background:linear-gradient(135deg,#ff3030,#ff3030);color:#fff}
+.mcard-body{padding:1rem;flex:1;display:flex;flex-direction:column;gap:.5rem}
+.mcard-title{font-size:.88rem;font-weight:700;color:var(--text);line-height:1.3}
+.mcard-meta{font-size:.74rem;color:var(--text3);font-weight:500}
+.mcard-btn{
+  margin-top:auto;background:var(--grad3);color:#fff;border:none;
+  border-radius:var(--r3);padding:.5rem 1rem;font-size:.78rem;font-weight:700;
+  transition:all .2s;text-align:center;
+}
+.mcard-btn:hover{opacity:.88;transform:scale(.98)}
+
+/* Featured card (horizontal) */
+.fcard{
+  background:var(--card);border-radius:var(--r);
+  box-shadow:0 2px 16px rgba(20,56,166,.08);
+  overflow:hidden;transition:all .25s;
+  display:grid;grid-template-columns:140px 1fr;
+  border:1px solid var(--border);min-height:200px;
+}
+.fcard:hover{transform:translateY(-4px);box-shadow:var(--shadow2)}
+.fcard-img{overflow:hidden;position:relative}
+.fcard-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.fcard:hover .fcard-img img{transform:scale(1.07)}
+.fcard-body{padding:1.1rem;display:flex;flex-direction:column;gap:.5rem}
+.fcard-title{font-size:1rem;font-weight:800;color:var(--text);line-height:1.2}
+.fcard-desc{font-size:.78rem;color:var(--text2);line-height:1.6;flex:1}
+.fcard-btn{
+  background:var(--grad);color:#fff;border:none;border-radius:var(--r3);
+  padding:.55rem 1.25rem;font-size:.8rem;font-weight:700;transition:all .2s;
+  width:fit-content;
+}
+.fcard-btn:hover{opacity:.88;transform:scale(.98)}
+
+/* ── FILTER PILLS ── */
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.fpill{
+  background:#fff;color:var(--text2);border:1.5px solid var(--border);
+  border-radius:var(--r3);padding:.42rem 1.1rem;font-size:.8rem;font-weight:600;
+  transition:all .2s;
+}
+.fpill:hover{border-color:var(--pu);color:var(--pu)}
+.fpill.on{background:var(--grad3);color:#fff;border-color:transparent;box-shadow:var(--shadow)}
+
+/* ── MOVIE GRID ── */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:1rem}
+.mgrid.wide{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+
+/* ── PROMO BANNER ── */
+.promo-banner{
+  background:var(--grad);border-radius:var(--r);
+  padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;
+  gap:2rem;margin:2rem 0;flex-wrap:wrap;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.promo-banner::before{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.06)}
+.promo-banner::after{content:'';position:absolute;right:60px;bottom:-60px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
+.pb-text h3{font-size:1.4rem;font-weight:800;color:#fff;margin-bottom:.4rem}
+.pb-text p{font-size:.85rem;color:rgba(255,255,255,.82)}
+.pb-btn{background:#fff;color:var(--pu);border:none;border-radius:var(--r3);padding:.75rem 2rem;font-size:.9rem;font-weight:700;flex-shrink:0;transition:all .2s;z-index:1}
+.pb-btn:hover{transform:scale(1.04)}
+
+/* ── PROGRESS BAR ── */
+.progbar{
+  display:flex;align-items:center;
+  background:#fff;border:1px solid var(--border);border-radius:var(--r3);
+  padding:5px;margin-bottom:2rem;max-width:520px;
+  box-shadow:0 2px 12px rgba(20,56,166,.08);
+}
+.pstep{flex:1;text-align:center;padding:7px 8px;border-radius:var(--r3);font-size:.68rem;font-weight:700;color:var(--text3);letter-spacing:.3px;transition:all .3s;white-space:nowrap}
+.pstep.on{background:var(--grad);color:#fff;box-shadow:var(--shadow)}
+.pstep.dn{color:var(--pu)}
+
+/* ── SEAT MAP ── */
+.cinema-outer{max-width:740px}
+.cinema-box{
+  background:#fff;border:1px solid var(--border);border-radius:var(--r);
+  padding:2rem;margin-bottom:1.25rem;
+  box-shadow:0 2px 16px rgba(20,56,166,.08);
+  position:relative;overflow:hidden;
+}
+.cinema-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad)}
+.screen-area{text-align:center;margin-bottom:2rem}
+.screenbar{display:inline-block;width:65%;height:6px;background:linear-gradient(90deg,transparent,rgba(20,56,166,.5),transparent);border-radius:var(--r3);margin-bottom:.5rem;box-shadow:0 4px 16px rgba(20,56,166,.2)}
+.screentxt{font-size:.66rem;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--text3)}
+.couchr{display:flex;justify-content:center;align-items:flex-start;gap:2rem;margin:1.5rem 0}
+.couchc{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.couchlbl{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:2px}
+.couchs{display:flex;flex-direction:column;gap:8px}
+
+/* Sofa seat */
+.seat{
+  width:76px;height:58px;border-radius:14px 14px 8px 8px;
+  border:2px solid #c8d0ed;background:#eaedfa;
+  cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;
+  transition:all .18s;user-select:none;position:relative;
+  box-shadow:0 2px 8px rgba(20,56,166,.06);
+}
+.seat::after{content:'';position:absolute;top:0;left:10px;right:10px;height:7px;background:rgba(20,56,166,.04);border-radius:0 0 6px 6px}
+.seat:hover:not(.occupied){background:#c0cdf0;border-color:#1438A6;transform:scale(1.05);box-shadow:0 4px 16px rgba(20,56,166,.2)}
+.seat.selected{background:var(--grad3);border-color:var(--pu3);transform:scale(1.06);box-shadow:0 4px 16px rgba(20,56,166,.35)}
+.seat.selected .sn{color:rgba(255,255,255,.85)}
+.seat.occupied{background:#F2F2F2;border-color:#e0e0e0;cursor:not-allowed;opacity:.5}
+.si{font-size:1.1rem;line-height:1}
+.sn{font-size:.67rem;font-weight:700;color:var(--text3)}
+
+/* VIP premium seat — vertical mattress shape */
+.vipc{display:flex;flex-direction:column;align-items:center;gap:.45rem;padding-top:30px}
+.viplbl{font-size:.57rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--pu);margin-bottom:3px}
+.seat-vip{
+  width:54px;height:118px;border-radius:20px;
+  border:2.5px solid var(--pu2);
+  background:linear-gradient(180deg,#d6def5,#c0cdf0);
+  cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;
+  transition:all .2s;user-select:none;position:relative;
+  box-shadow:0 0 20px rgba(20,56,166,.15),0 4px 12px rgba(20,56,166,.12);
+}
+.seat-vip::before{content:'';position:absolute;top:8px;left:7px;right:7px;height:12px;background:rgba(20,56,166,.08);border-radius:8px}
+.seat-vip::after{content:'';position:absolute;bottom:8px;left:7px;right:7px;height:12px;background:rgba(20,56,166,.06);border-radius:8px}
+.seat-vip:hover:not(.occupied){transform:scale(1.07);box-shadow:0 0 32px rgba(20,56,166,.3),0 8px 24px rgba(20,56,166,.2)}
+.seat-vip.selected{background:var(--grad2);border-color:var(--pu3);transform:scale(1.08);box-shadow:0 0 40px rgba(20,56,166,.5)}
+.seat-vip.selected .sn{color:rgba(255,255,255,.9)}
+.seat-vip.occupied{opacity:.4;cursor:not-allowed;box-shadow:none}
+.seat-vip .si{font-size:1.35rem;line-height:1}
+.seat-vip .sn{font-size:.6rem;font-weight:800;color:var(--pu2);letter-spacing:.5px}
+.seat-vip.selected .sn{color:rgba(255,255,255,.9)}
+
+/* counter */
+.scounter{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:#fff;border:1.5px solid var(--border);border-radius:var(--r3);
+  padding:6px 18px;font-size:.82rem;font-weight:700;color:var(--text);
+  margin-bottom:.9rem;box-shadow:0 2px 8px rgba(20,56,166,.06);
+}
+.scnt{color:var(--pu);font-weight:800}
+
+/* legend */
+.sleg{display:flex;justify-content:center;gap:1.75rem;margin-top:1.75rem;padding-top:1.5rem;border-top:1px solid #dde4f5;flex-wrap:wrap}
+.legit{display:flex;align-items:center;gap:7px;font-size:.74rem;color:var(--text2);font-weight:500}
+.legdot{width:20px;height:14px;border-radius:5px}
+.legdot.fr{background:#eaedfa;border:2px solid #e8e0f5}
+.legdot.sl{background:var(--pu2);border:2px solid var(--pu3)}
+.legdot.oc{background:#F2F2F2;border:2px solid #e0e0e0;opacity:.5}
+.legdot.vp{background:linear-gradient(180deg,#d6def5,#c0cdf0);border:2px solid var(--pu2)}
+
+/* info bar */
+.ibar{
+  background:#fff;border:1.5px solid var(--border);border-radius:var(--r2);
+  padding:1rem 1.5rem;display:flex;align-items:center;
+  justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(20,56,166,.07);max-width:740px;
+}
+.ibar-t{font-size:.84rem;color:var(--text2)}
+.ibar-t strong{color:var(--text);font-size:.92rem;font-weight:700}
+.ibar-s{font-size:.76rem;font-weight:700;color:var(--pu);margin-top:3px}
+
+/* ── COMBO ── */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem}
+.ccard{
+  border:2px solid var(--border);border-radius:var(--r);
+  padding:1.4rem;cursor:pointer;transition:all .2s;background:#fff;text-align:center;
+  box-shadow:0 2px 12px rgba(20,56,166,.06);
+}
+.ccard:hover{border-color:var(--pu2);transform:translateY(-3px);box-shadow:var(--shadow)}
+.ccard.on{border-color:var(--pu);background:#eaedfa;box-shadow:var(--shadow)}
+.ccard .ci{font-size:2.2rem;margin-bottom:.65rem}
+.ccard .cn{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.ccard.on .cn{color:var(--pu)}
+.ccard .cd{font-size:.76rem;color:var(--text2);line-height:1.5}
+.subgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-top:.9rem}
+
+/* ── FORM ── */
+.fpanel{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:2rem;max-width:540px;box-shadow:0 2px 16px rgba(20,56,166,.08)}
+.sumbox{background:#eaedfa;border:1px solid #c8d0ed;border-radius:var(--r2);padding:1rem 1.25rem;margin-bottom:1.4rem}
+.sumrow{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid rgba(20,56,166,.08);gap:1rem;font-size:.84rem}
+.sumrow:last-child{border:none}
+.sk{color:var(--text2)}
+.sv{font-weight:700;color:var(--text);text-align:right}
+.fg{margin-bottom:1.15rem}
+.fl{display:block;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.fi{
+  width:100%;background:#eaedfa;border:1.5px solid #c8d0ed;border-radius:12px;
+  padding:.78rem 1rem;font-size:.92rem;color:var(--text);font-family:'Poppins',sans-serif;
+  outline:none;transition:border-color .2s;
+}
+.fi:focus{border-color:var(--pu)}
+.fi::placeholder{color:var(--text3)}
+.ferr{color:#ef4444;font-size:.78rem;display:none;margin-bottom:1rem;padding:.55rem 1rem;background:#fef2f2;border-radius:10px;border:1px solid #fecaca}
+
+/* ── TICKET ── */
+.twrap{max-width:470px}
+.sstrip{background:#f0fdf4;border:1.5px solid #86efac;border-radius:14px;padding:.9rem 1.25rem;display:flex;align-items:center;gap:.75rem;margin-bottom:1.4rem;font-size:.86rem}
+.sstrip .ico{font-size:1.35rem}
+.sstrip strong{display:block;color:#16a34a;font-size:.9rem;margin-bottom:2px}
+.sstrip span{color:#4b5563;font-size:.78rem}
+.tcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fadeUp .5s ease;box-shadow:var(--shadow)}
+.ttop{background:var(--grad);padding:1.4rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.tlogo{font-size:1.1rem;font-weight:900;color:#fff;letter-spacing:.5px}
+.ttype{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.tnotch{display:flex;align-items:center}
+.tnotch::before,.tnotch::after{content:'';flex:1;height:1px;background:#dde4f5}
+.tnc{width:22px;height:22px;border-radius:50%;background:#F2F2F2;border:1px solid #dde4f5;margin:0 8px;flex-shrink:0}
+.tbody{padding:1.4rem 2rem}
+.tmovie{font-size:1.5rem;font-weight:900;color:var(--text);margin-bottom:1.2rem;line-height:1.1}
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.1rem}
+.tfl{font-size:.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:3px}
+.tfv{font-size:.88rem;font-weight:700;color:var(--text)}
+.thl{background:#eaedfa;border:1.5px solid #c8d0ed;border-radius:12px;padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.thl-l{font-size:.68rem;text-transform:uppercase;letter-spacing:1px;color:var(--text3)}
+.thl-v{font-size:.97rem;font-weight:900;color:var(--pu)}
+.tbc{border-top:1px dashed #c8d0ed;margin-top:1.1rem;padding-top:1.25rem;text-align:center}
+.bcl{display:flex;justify-content:center;align-items:flex-end;gap:2px;height:44px;margin-bottom:6px}
+.bcb{background:var(--pu);opacity:.2;width:3px;border-radius:1px}
+.tcode{font-size:.68rem;color:var(--text3);letter-spacing:3px;font-family:monospace}
+.tacts{margin-top:1.4rem;display:flex;gap:.75rem;flex-wrap:wrap}
+
+/* ── BUTTONS ── */
+.btnP{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:var(--grad);color:#fff;border:none;border-radius:var(--r3);padding:.78rem 1.75rem;font-size:.93rem;font-weight:700;transition:all .2s;box-shadow:var(--shadow)}
+.btnP:hover{opacity:.9;transform:translateY(-1px);box-shadow:var(--shadow2)}
+.btnP:disabled{opacity:.35;pointer-events:none}
+.btnP.lg{padding:.95rem 2.5rem;font-size:1rem}
+.btnO{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:#fff;color:var(--pu);border:1.5px solid var(--border);border-radius:var(--r3);padding:.78rem 1.5rem;font-size:.88rem;font-weight:600;transition:all .18s}
+.btnO:hover{border-color:var(--pu);background:#eaedfa}
+
+/* ── SECTION HEADER ── */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
+.sht{font-size:1.6rem;font-weight:800;color:var(--text)}
+.shs{font-size:.83rem;color:var(--text2);margin-top:2px}
+
+/* ── MOVIE DETAIL MODAL ── */
+#movieModal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);align-items:flex-start;justify-content:center;padding:1.5rem;overflow-y:auto;cursor:pointer}
+#movieModal.open{display:flex;animation:fadeUp .2s ease}
+.mmod-box{
+  background:#fff;border-radius:var(--r);overflow:hidden;
+  max-width:860px;width:100%;cursor:default;
+  box-shadow:0 32px 80px rgba(0,0,0,.5);
+  margin:auto;
+}
+.mmod-top{
+  background:var(--grad);padding:1.2rem 1.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.mmod-top-title{font-size:.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.mmod-x{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.mmod-x:hover{background:rgba(255,255,255,.3)}
+.mmod-body{display:grid;grid-template-columns:220px 1fr;gap:0}
+@media(max-width:640px){.mmod-body{grid-template-columns:1fr}}
+.mmod-poster-col{background:#1a0a2e;position:relative}
+.mmod-poster-col img{width:100%;height:100%;object-fit:cover;min-height:300px;display:block}
+.mmod-badge{position:absolute;top:12px;left:12px}
+.mmod-content{padding:1.75rem 1.5rem;display:flex;flex-direction:column;gap:1rem}
+.mmod-title{font-size:1.5rem;font-weight:900;color:var(--pu);line-height:1.15}
+.mmod-orig{font-size:.8rem;color:var(--text2);margin-top:-6px}
+.mmod-synopsis label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);display:block;margin-bottom:5px}
+.mmod-synopsis p{font-size:.84rem;color:var(--text2);line-height:1.65}
+.mmod-info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem}
+@media(max-width:480px){.mmod-info-grid{grid-template-columns:repeat(2,1fr)}}
+.mmod-info-item{}
+.mmod-info-item .lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:3px}
+.mmod-info-item .val{font-size:.84rem;font-weight:700;color:var(--text)}
+.mmod-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem}
+.btn-trailer{background:rgba(20,56,166,.1);color:var(--pu);border:1.5px solid var(--pu2);border-radius:var(--r3);padding:.65rem 1.5rem;font-size:.84rem;font-weight:700;display:flex;align-items:center;gap:.4rem;transition:all .2s}
+.btn-trailer:hover{background:rgba(20,56,166,.18)}
+/* Orange cineprox-style CTA */
+.mmod-reserve-cta{background:#f97316;border-radius:var(--r2);padding:1.1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-top:.25rem}
+.mmod-reserve-cta .ct{font-size:.95rem;font-weight:800;color:#fff}
+.mmod-reserve-cta .cs{font-size:.78rem;color:rgba(255,255,255,.85)}
+.btn-reserve-cta{background:#fff;color:#f97316;border:none;border-radius:var(--r3);padding:.6rem 1.4rem;font-size:.84rem;font-weight:700;transition:all .2s}
+.btn-reserve-cta:hover{transform:scale(1.03)}
+
+/* ── MOVIE SELECT PAGE ── */
+.movie-select-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem}
+.msel-card{background:#fff;border-radius:var(--r);border:2px solid var(--border);overflow:hidden;cursor:pointer;transition:all .22s}
+.msel-card:hover{border-color:var(--pu);transform:translateY(-4px);box-shadow:var(--shadow)}
+.msel-card.on{border-color:var(--pu);box-shadow:var(--shadow2)}
+.msel-card img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block}
+.msel-card-body{padding:.65rem .75rem}
+.msel-card-title{font-size:.72rem;font-weight:700;color:var(--text);line-height:1.25}
+
+/* ── COMBO IMAGE CARDS ── */
+.combo-img-wrap{text-align:center;margin-bottom:.75rem}
+.combo-img-wrap img{width:100%;max-height:180px;object-fit:cover;border-radius:12px;display:block}
+
+#tmodal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:1.5rem;cursor:pointer}
+#tmodal.open{display:flex;animation:fadeUp .2s ease}
+.tmod-box{width:100%;max-width:880px;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.7)}
+.tmod-box iframe{width:100%;height:100%;border:none}
+.tmod-x{position:fixed;top:1.25rem;right:1.25rem;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .18s;z-index:2001}
+.tmod-x:hover{background:var(--pu)}
+
+/* ── FOOTER ── */
+.footer{background:#0D0D0D;padding:3rem 2rem 1.5rem;margin-top:3rem}
+.footer-in{max-width:1280px;margin:0 auto}
+.footer-top{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:1.5rem}
+.footer-logo{height:36px;margin-bottom:1rem;filter:brightness(10)}
+.footer-desc{font-size:.8rem;color:rgba(255,255,255,.55);line-height:1.7}
+.footer-col h4{font-size:.82rem;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
+.footer-col a{display:block;font-size:.8rem;color:rgba(255,255,255,.55);margin-bottom:.5rem;transition:color .18s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.footer-copy{font-size:.74rem;color:rgba(255,255,255,.4)}
+#secretTap{font-size:.74rem;color:rgba(255,255,255,.25);cursor:pointer;padding:5px 9px;border-radius:8px;-webkit-tap-highlight-color:transparent;transition:background .2s;user-select:none;background:none;border:none}
+
+/* ── LOADING SCREEN ── */
+.loading-spinner{width:60px;height:60px;border:5px solid #dde4f5;border-top:5px solid var(--pu);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-bar-wrap{width:280px;height:8px;background:#dde4f5;border-radius:4px;margin-top:1.5rem;overflow:hidden}
+.loading-bar{height:100%;background:var(--grad);border-radius:4px;width:0%;transition:width .1s linear}
+
+/* ── QR CODE ── */
+#qrcode canvas, #qrcode img{border-radius:12px;box-shadow:0 4px 20px rgba(20,56,166,.15)}
+
+/* ── ADMIN STATUS BADGES ── */
+.status-badge{display:inline-flex;align-items:center;gap:.3rem;padding:3px 10px;border-radius:var(--r3);font-size:.65rem;font-weight:700;white-space:nowrap}
+.status-ingresado{background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
+.status-pendiente{background:#fef9f0;color:#d97706;border:1px solid #fcd34d}
+.abtn.qr{background:rgba(255,255,255,.22);color:#fff;border:1.5px solid rgba(255,255,255,.4)}.abtn.qr:hover{background:rgba(255,255,255,.35)}
+
+/* QR Scanner styles */
+#qrScannerOverlay.open{display:flex!important}
+#qrResultOverlay.open{display:flex!important}
+
+.skel{background:linear-gradient(90deg,#dde4f5 25%,#c8d3ee 50%,#dde4f5 75%);background-size:400% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r2)}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.skel-card{background:#fff;border-radius:var(--r);padding:.75rem;border:1px solid var(--border);box-shadow:0 2px 12px rgba(20,56,166,.06)}
+.skel-img{aspect-ratio:2/3;border-radius:12px;margin-bottom:.75rem}
+.skel-t1{height:12px;border-radius:6px;margin-bottom:.5rem;width:80%}
+.skel-t2{height:10px;border-radius:6px;width:55%}
+
+/* ── ADMIN PANEL ── */
+#adminOverlay{display:none;position:fixed;inset:0;background:#F2F2F2;z-index:9999;overflow-y:auto;font-family:'Poppins',sans-serif}
+#adminOverlay.open{display:block;animation:fadeUp .25s ease}
+#adminLogin{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8ecf8,#F2F2F2,#e8ecf8)}
+.abox{background:#FFFFFF;border:1.5px solid var(--border);border-radius:var(--r);padding:2.75rem 2.25rem;width:100%;max-width:390px;box-shadow:var(--shadow2);position:relative}
+.alogo{text-align:center;margin-bottom:1.75rem}
+.alogo img{height:52px;margin:0 auto 1rem}
+.alogo .al-s{font-size:.66rem;color:var(--text3);letter-spacing:3px;text-transform:uppercase}
+.atitle{font-size:.95rem;font-weight:700;color:var(--text);text-align:center;margin-bottom:1.6rem}
+.af{margin-bottom:1rem}
+.af label{display:block;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin-bottom:5px}
+.af input{width:100%;background:#eaedfa;border:1.5px solid #c8d0ed;border-radius:12px;padding:.82rem 1rem;font-size:.9rem;color:var(--text);font-family:'Poppins',sans-serif;outline:none;transition:border-color .18s}
+.af input:focus{border-color:var(--pu)}
+.af input::placeholder{color:var(--text3)}
+.alnbtn{width:100%;background:var(--grad);color:#fff;border:none;border-radius:var(--r3);padding:.95rem;font-size:.97rem;font-weight:700;cursor:pointer;transition:all .18s;margin-top:.4rem;font-family:'Poppins',sans-serif;box-shadow:var(--shadow)}
+.alnbtn:hover{opacity:.9;transform:translateY(-1px)}
+.alnerr{color:#ef4444;font-size:.76rem;text-align:center;margin-top:1rem;display:none;padding:.55rem;background:#fef2f2;border-radius:10px;border:1px solid #fecaca}
+.ax{position:absolute;top:.9rem;right:.9rem;width:30px;height:30px;border-radius:50%;background:#eaedfa;border:1px solid var(--border);color:var(--pu);font-size:.85rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#adminPanel2{display:none}
+#adminPanel2.open{display:block}
+.ahdr{background:var(--grad);padding:0 2rem;position:sticky;top:0;z-index:100}
+.ahdr-in{max-width:1200px;margin:0 auto;display:flex;align-items:center;height:60px;gap:1rem;flex-wrap:wrap}
+.ahdr-logo{color:#fff;font-weight:900;font-size:1.1rem}
+.ahdr-badge{background:rgba(255,255,255,.2);color:#fff;border-radius:var(--r3);padding:2px 12px;font-size:.66rem;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.ahdr-btns{margin-left:auto;display:flex;gap:.45rem;flex-wrap:wrap}
+.abtn{padding:6px 12px;border-radius:var(--r3);font-size:.73rem;font-weight:700;border:none;cursor:pointer;transition:all .18s;font-family:'Poppins',sans-serif}
+.abtn.rf{background:rgba(255,255,255,.2);color:#fff}.abtn.rf:hover{background:rgba(255,255,255,.35)}
+.abtn.dn{background:rgba(255,80,80,.25);color:#fff;border:1px solid rgba(255,100,100,.3)}.abtn.dn:hover{background:rgba(255,80,80,.4)}
+.abtn.ou{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8)}.abtn.ou:hover{background:rgba(255,255,255,.2)}
+.amain{max-width:1200px;margin:0 auto;padding:1.75rem 1.5rem 4rem;background:#F2F2F2;min-height:calc(100vh - 60px)}
+.astats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.astat{background:#fff;border:1px solid var(--border);border-radius:var(--r2);padding:1.1rem 1.4rem;box-shadow:0 2px 12px rgba(20,56,166,.06)}
+.astat-l{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:5px}
+.astat-v{font-size:2.2rem;font-weight:900;line-height:1}
+.astat-v.g{color:var(--pu)}.astat-v.r{color:#ef4444}.astat-v.gr{color:#22c55e}.astat-v.w{color:var(--text);font-size:.95rem;padding-top:5px}
+.asm{background:#fff;border:1px solid var(--border);border-radius:var(--r2);padding:1.4rem;margin-bottom:1.5rem;box-shadow:0 2px 12px rgba(20,56,166,.06)}
+.asm-t{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:1.1rem}
+.asm-b{display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap}
+.asm-col{display:flex;flex-direction:column;align-items:center;gap:6px}
+.asm-lbl{font-size:.58rem;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.asm-seat{width:54px;height:38px;border-radius:7px;border:2px solid #c8d0ed;background:#eaedfa;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:var(--text3);gap:2px}
+.asm-seat.occ{background:#fef2f2;border-color:#fecaca;color:#ef4444}
+.asm-vip{width:42px;height:90px;border-radius:14px;border:2px solid var(--pu2);background:linear-gradient(180deg,#d6def5,#c0cdf0);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;color:var(--pu);gap:3px}
+.asm-vip.occ{background:#fef2f2;border-color:#fecaca;color:#ef4444}
+.asm-leg{margin-top:1rem;padding-top:1rem;border-top:1px solid #dde4f5;width:100%;display:flex;gap:1.5rem;font-size:.7rem;color:var(--text2);flex-wrap:wrap}
+.atbl{background:#fff;border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;box-shadow:0 2px 12px rgba(20,56,166,.06)}
+.atbl-hd{padding:1rem 1.4rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.65rem}
+.atbl-t{font-size:.9rem;font-weight:800;color:var(--text)}
+.atbl-sc{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.at{width:100%;border-collapse:collapse;min-width:620px}
+table.at thead{background:#eaedfa}
+table.at th{padding:10px 13px;text-align:left;font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);white-space:nowrap}
+table.at td{padding:12px 13px;font-size:.81rem;border-top:1px solid #dde4f5;vertical-align:middle;color:var(--text2)}
+table.at tr:hover td{background:#f0f2fb}
+.abdg{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:var(--r3);font-size:.64rem;font-weight:700;white-space:nowrap}
+
+/* ── ADMIN MOBILE CARDS (alternativa a tabla en móvil) ── */
+.admin-res-cards{display:none;flex-direction:column;gap:.85rem;padding:1rem 1rem 2rem}
+.arc{background:#fff;border:1px solid var(--border);border-radius:var(--r2);padding:1rem 1.1rem;box-shadow:0 2px 10px rgba(20,56,166,.06)}
+.arc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem;gap:.5rem}
+.arc-name{font-size:.9rem;font-weight:800;color:var(--text)}
+.arc-email{font-size:.72rem;color:var(--text3);margin-top:1px}
+.arc-rows{display:grid;grid-template-columns:1fr 1fr;gap:.45rem .75rem;margin-bottom:.75rem}
+.arc-lbl{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:1px}
+.arc-val{font-size:.78rem;font-weight:600;color:var(--text)}
+.arc-del{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:4px 10px;font-size:.7rem;font-weight:700;cursor:pointer;font-family:'Poppins',sans-serif;flex-shrink:0}
+/* Estado de carga */
+.admin-loading{text-align:center;padding:2.5rem 1rem;color:var(--text3);font-size:.85rem}
+.admin-sync-badge{display:inline-flex;align-items:center;gap:.4rem;background:#f0fdf4;border:1px solid #86efac;color:#16a34a;border-radius:var(--r3);padding:3px 10px;font-size:.65rem;font-weight:700;margin-left:.5rem}
+.admin-sync-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:blink 1.4s infinite}
+
+@media(max-width:700px){
+  .astats{grid-template-columns:1fr 1fr}
+  .ahdr-in{height:auto;padding:.75rem 0;gap:.5rem}
+  .ahdr-logo{font-size:.9rem}
+  .ahdr-btns{gap:.3rem}
+  .abtn{padding:5px 9px;font-size:.65rem}
+  .asm-b{gap:1rem;justify-content:center}
+  /* En móvil: ocultar tabla y mostrar tarjetas */
+  .atbl-sc{display:none}
+  .admin-res-cards{display:flex}
+  .amain{padding:1rem .75rem 4rem}
+}
+.abdg.s{background:#eaedfa;color:var(--pu);border:1px solid #c8d0ed}
+.abdg.c{background:#f0fdf4;color:#16a34a;border:1px solid #86efac}
+.acode{font-family:monospace;font-size:.72rem;color:var(--text3);letter-spacing:1px}
+.aempty{text-align:center;padding:2.75rem;color:var(--text3);font-size:.84rem}
+.aempty-i{font-size:2.5rem;display:block;margin-bottom:.65rem;opacity:.4}
+
+/* Mobile admin cards */
+.at-mobile-card{display:none;background:#fff;border:1px solid var(--border);border-radius:var(--r2);padding:1rem;margin:.5rem .75rem;box-shadow:0 2px 8px rgba(20,56,166,.06)}
+.at-mc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;font-size:.95rem;font-weight:700;color:var(--text)}
+.at-mc-row{display:flex;flex-direction:column;gap:3px;margin-bottom:.6rem;padding-bottom:.6rem;border-bottom:1px solid #dde4f5}
+.at-mc-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.at-mc-lbl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3)}
+.at-mc-row span:not(.at-mc-lbl){font-size:.82rem;color:var(--text2);display:flex;flex-wrap:wrap;gap:4px}
+@media(max-width:640px){
+  .at-desktop-row{display:none}
+  .at-mobile-card{display:block}
+  .atbl-sc{overflow-x:unset}
+  table.at thead{display:none}
+  table.at{min-width:unset;display:block}
+  table.at tbody{display:block}
+  .astats{grid-template-columns:repeat(2,1fr)!important}
+  .amain{padding:1rem .75rem 3rem}
+  .ahdr{padding:0 1rem}
+}
+
+/* ── SCROLL ANIMATIONS (legacy) ── */
+.fade-in{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ══════════════════════════════════════════
+   PARALLAX & CINEMATIC SCROLL EFFECTS
+   Professional-grade like Apple / Nike
+══════════════════════════════════════════ */
+
+/* ── NAVBAR SCROLL TRANSFORM ── */
+.navbar{
+  transition: all .4s cubic-bezier(.25,.46,.45,.94);
+  will-change: transform, backdrop-filter;
+}
+.navbar.scrolled{
+  background: rgba(10,0,16,.88)!important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 0 2px 40px rgba(0,0,0,.45), 0 1px 0 rgba(20,56,166,.2)!important;
+  height: 52px!important;
+  padding-top:0!important;padding-bottom:0!important;
+}
+.navbar.scrolled .nav-logo img{ height:30px!important; }
+
+/* ── HERO PARALLAX LAYERS ── */
+.hero-carousel{ perspective: 1000px; }
+.hero-slide-left{
+  will-change: transform;
+  transform-origin: left center;
+}
+.hero-slide-right img{
+  will-change: transform;
+  transform-origin: center center;
+}
+/* Grain overlay for cinematic texture */
+.hero-carousel::after{
+  content:'';
+  position:absolute;inset:0;pointer-events:none;z-index:5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:.35;mix-blend-mode:overlay;
+}
+
+/* ── REVEAL ANIMATIONS ── */
+/* Slide up */
+.reveal-up{
+  opacity:0;
+  transform: translateY(60px);
+  transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+  will-change: opacity, transform;
+}
+.reveal-up.is-visible{opacity:1;transform:translateY(0)}
+
+/* Slide from left */
+.reveal-left{
+  opacity:0;
+  transform: translateX(-60px);
+  transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+  will-change: opacity, transform;
+}
+.reveal-left.is-visible{opacity:1;transform:translateX(0)}
+
+/* Slide from right */
+.reveal-right{
+  opacity:0;
+  transform: translateX(60px);
+  transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+  will-change: opacity, transform;
+}
+.reveal-right.is-visible{opacity:1;transform:translateX(0)}
+
+/* Scale reveal */
+.reveal-scale{
+  opacity:0;
+  transform: scale(.92);
+  transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+  will-change: opacity, transform;
+}
+.reveal-scale.is-visible{opacity:1;transform:scale(1)}
+
+/* Stagger children */
+.stagger-children > *{
+  opacity:0;
+  transform:translateY(40px);
+  transition: opacity .65s cubic-bezier(.16,1,.3,1), transform .65s cubic-bezier(.16,1,.3,1);
+}
+.stagger-children.is-visible > *:nth-child(1){opacity:1;transform:translateY(0);transition-delay:.05s}
+.stagger-children.is-visible > *:nth-child(2){opacity:1;transform:translateY(0);transition-delay:.15s}
+.stagger-children.is-visible > *:nth-child(3){opacity:1;transform:translateY(0);transition-delay:.25s}
+.stagger-children.is-visible > *:nth-child(4){opacity:1;transform:translateY(0);transition-delay:.35s}
+.stagger-children.is-visible > *:nth-child(5){opacity:1;transform:translateY(0);transition-delay:.45s}
+.stagger-children.is-visible > *:nth-child(6){opacity:1;transform:translateY(0);transition-delay:.55s}
+.stagger-children.is-visible > *:nth-child(n+7){opacity:1;transform:translateY(0);transition-delay:.6s}
+
+/* ── FLOATING PARTICLES ── */
+#parallax-particles{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;overflow:hidden;
+}
+.particle{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(20,56,166,.35),transparent 70%);
+  will-change:transform;
+  animation: floatParticle var(--dur,20s) var(--delay,0s) infinite ease-in-out alternate;
+}
+@keyframes floatParticle{
+  0%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(var(--x1,30px),var(--y1,-20px)) scale(1.05)}
+  66%{transform:translate(var(--x2,-20px),var(--y2,15px)) scale(.97)}
+  100%{transform:translate(var(--x3,15px),var(--y3,-30px)) scale(1.02)}
+}
+
+/* ── PROMO BANNER PARALLAX ── */
+.promo-banner{
+  position:relative;overflow:hidden;
+  transition: transform .1s linear;
+}
+.promo-banner .pb-bg-orb{
+  position:absolute;border-radius:50%;
+  background:rgba(255,255,255,.07);
+  pointer-events:none;
+  transition: transform .2s ease-out;
+}
+
+/* ── CARD 3D TILT EFFECT ── */
+.mcard,.fcard{
+  transform-style: preserve-3d;
+  transition: transform .25s cubic-bezier(.25,.46,.45,.94), box-shadow .25s ease;
+}
+.mcard .mcard-img img, .fcard .fcard-img img{
+  transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ── SECTION TITLE WORD-BY-WORD REVEAL ── */
+.word-reveal{
+  overflow:hidden;display:inline-block;
+}
+.word-reveal span{
+  display:inline-block;
+  opacity:0;transform:translateY(100%);
+  transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);
+}
+.word-reveal.is-visible span{opacity:1;transform:translateY(0)}
+
+/* ── SCROLL PROGRESS BAR ── */
+#scroll-progress{
+  position:fixed;top:0;left:0;width:0%;height:3px;
+  background:linear-gradient(90deg,#1438A6,#0E2880,#f97316);
+  z-index:99999;pointer-events:none;
+  transition:width .05s linear;
+  box-shadow:0 0 12px rgba(20,56,166,.6);
+}
+
+/* ── HERO CONTENT ENTRANCE ── */
+.hero-badge{
+  animation: heroBadge .8s .2s cubic-bezier(.16,1,.3,1) both;
+}
+.hero-title{
+  animation: heroTitle .9s .35s cubic-bezier(.16,1,.3,1) both;
+}
+.hero-desc{
+  animation: heroDesc .8s .5s cubic-bezier(.16,1,.3,1) both;
+}
+.hero-btns{
+  animation: heroDesc .8s .65s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes heroBadge{
+  from{opacity:0;transform:translateY(20px) scale(.9)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes heroTitle{
+  from{opacity:0;transform:translateY(40px) skewY(2deg)}
+  to{opacity:1;transform:translateY(0) skewY(0)}
+}
+@keyframes heroDesc{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* Pause hero anim when navigating */
+.pg:not(.on) .hero-badge,
+.pg:not(.on) .hero-title,
+.pg:not(.on) .hero-desc,
+.pg:not(.on) .hero-btns{animation:none}
+
+/* ── MAGNETIC BUTTON HOVER ── */
+.btn-hero,.btn-hero2,.pb-btn,.fcard-btn{
+  transition: transform .3s cubic-bezier(.25,.46,.45,.94), box-shadow .3s ease, opacity .2s;
+}
+
+/* ── SECTION DIVIDER LINES ── */
+.sec-head .sec-title{
+  position:relative;display:inline-block;
+}
+.sec-head .sec-title::after{
+  content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;
+  background:var(--grad3);border-radius:2px;
+  transition:width .6s .2s cubic-bezier(.16,1,.3,1);
+}
+.sec-head.is-visible .sec-title::after{width:100%}
+
+/* ── MOVING GRADIENT BG ── */
+@keyframes gradientShift{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+.promo-banner{
+  background-size:200% 200%!important;
+  animation:gradientShift 6s ease infinite;
+}
+
+/* ── IMAGE PARALLAX WRAPPER ── */
+.parallax-img-wrap{overflow:hidden;position:relative}
+.parallax-img-wrap img{
+  transform: scale(1.15);
+  will-change:transform;
+  transition:transform .1s linear;
+}
+
+/* ── CURSOR SPOTLIGHT (desktop only) ── */
+@media(hover:hover){
+  .mcard{position:relative;overflow:hidden}
+  .mcard::after{
+    content:'';position:absolute;
+    width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(circle,rgba(20,56,166,.12),transparent 70%);
+    pointer-events:none;z-index:10;
+    transform:translate(-50%,-50%);
+    opacity:0;transition:opacity .3s;
+    left:var(--mx,50%);top:var(--my,50%);
+  }
+  .mcard:hover::after{opacity:1}
+}
+
+/* ── COUNT UP NUMBERS ── */
+.count-up{display:inline-block}
+
+/* ── HORIZONTAL SCROLL SECTION ── */
+.hscroll-track{
+  display:flex;gap:1rem;
+  transition:transform .05s linear;
+  will-change:transform;
+}
+
+/* reduce-motion support */
+@media(prefers-reduced-motion:reduce){
+  .reveal-up,.reveal-left,.reveal-right,.reveal-scale,.stagger-children>*,
+  .hero-badge,.hero-title,.hero-desc,.hero-btns{
+    animation:none!important;transition:none!important;
+    opacity:1!important;transform:none!important;
+  }
+  .particle{animation:none!important}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){.featured-grid{grid-template-columns:1fr 1fr}.footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){
+  .nav-links,.nav-search,.nav-right .btn-nav{display:none}
+  .hambtn{display:flex}
+  .featured-grid{grid-template-columns:1fr}
+  .fcard{grid-template-columns:1fr}
+  .fcard-img{height:200px}
+  .cgrid{grid-template-columns:1fr}
+  .subgrid{grid-template-columns:repeat(2,1fr)}
+  .tgrid{grid-template-columns:1fr}
+  .astats{grid-template-columns:repeat(2,1fr)}
+  .footer-top{grid-template-columns:1fr}
+  .couchr{gap:1.2rem}
+  .seat{width:62px;height:48px}
+}
+@media(max-width:480px){.mgrid{grid-template-columns:repeat(2,1fr)}.sec{padding:1.75rem 1rem}}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- FLOATING PARTICLES -->
+<div id="parallax-particles" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav class="navbar">
+  <a href="#" onclick="backHome(event)" class="nav-logo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/CineColombia.png" alt="Cine Colombia">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="on" onclick="backHome(event)">Inicio</a></li>
+    <li><a href="#" onclick="scrollCart(event)">Cartelera</a></li>
+    <li><a href="#" onclick="goSeats(event)">Reservar</a></li>
+    <li><a href="#" onclick="scrollCart(event)">Series</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Buscar películas...">
+    </div>
+    <button class="btn-nav" onclick="goSeats(event)">🎟 Comprar boletos</button>
+  </div>
+  <button class="hambtn" onclick="openMob()"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobnav" id="mobnav" onclick="closeMobOuter(event)">
+  <div class="mobnav-panel">
+    <button class="mob-x" onclick="closeMob()">✕</button>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/CineColombia.png" alt="Cine Colombia" class="mob-logo">
+    <a href="#" onclick="backHome(event);closeMob()">🏠 Inicio</a>
+    <a href="#" onclick="scrollCart(event);closeMob()">🎬 Cartelera</a>
+    <a href="#" onclick="goSeats(event);closeMob()">🎟 Reservar</a>
+  </div>
+</div>
+
+<!-- TRAILER MODAL -->
+<div id="tmodal" onclick="handleTmod(event)">
+  <button class="tmod-x" onclick="closeTmod()">✕</button>
+  <div class="tmod-box">
+    <iframe id="tframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- MOVIE DETAIL MODAL -->
+<div id="movieModal" onclick="handleMovieMod(event)">
+  <div class="mmod-box" id="mmodBox">
+    <div class="mmod-top">
+      <div class="mmod-top-title">Detalle de Película</div>
+      <button class="mmod-x" onclick="closeMovieMod()">✕</button>
+    </div>
+    <div class="mmod-body">
+      <div class="mmod-poster-col">
+        <img id="mmodPoster" src="" alt="">
+        <div class="mmod-badge" id="mmodBadge"></div>
+      </div>
+      <div class="mmod-content">
+        <div>
+          <div class="mmod-title" id="mmodTitle"></div>
+          <div class="mmod-orig" id="mmodOrig"></div>
+        </div>
+        <div class="mmod-synopsis">
+          <label>Sinopsis</label>
+          <p id="mmodSynopsis"></p>
+        </div>
+        <div class="mmod-info-grid">
+          <div class="mmod-info-item"><div class="lbl">Año</div><div class="val" id="mmodYear"></div></div>
+          <div class="mmod-info-item"><div class="lbl">Género</div><div class="val" id="mmodGenre"></div></div>
+          <div class="mmod-info-item"><div class="lbl">Estreno</div><div class="val" id="mmodRelease"></div></div>
+          <div class="mmod-info-item"><div class="lbl">País</div><div class="val" id="mmodCountry"></div></div>
+          <div class="mmod-info-item"><div class="lbl">Duración</div><div class="val" id="mmodDuration"></div></div>
+          <div class="mmod-info-item"><div class="lbl">Clasificación</div><div class="val" id="mmodRating"></div></div>
+        </div>
+        <div class="mmod-actions">
+          <button class="btn-trailer" id="mmodTrailerBtn" onclick="openMovieTrailer()">▶ Ver Trailer</button>
+        </div>
+        <div class="mmod-reserve-cta" id="mmodCTA" style="display:none">
+          <div><div class="ct">¡Todo listo para que vivas la mejor experiencia de cine!</div><div class="cs">Selecciona tus asientos y prepárate para disfrutar.</div></div>
+          <button class="btn-reserve-cta" onclick="reserveFromModal()">Reservar →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOME PAGE ══ -->
+<div class="pg on" id="pg-home">
+
+  <!-- HERO CAROUSEL -->
+  <section class="hero-carousel" id="heroCarousel">
+    <div class="hero-track" id="heroTrack">
+
+      <!-- Slide 1: Super Mario Galaxy -->
+      <div class="hero-slide">
+        <div class="hero-slide-left">
+          <div class="hero-badge"><span class="dot"></span>En cartelera hoy</div>
+          <h1 class="hero-title">SUPER MARIO GALAXY:<br>LA PELÍCULA</h1>
+          <p class="hero-desc">Mario, Luigi, Toad y Peach viajan al espacio para detener a un dúo formado por Bowser Jr., Wario y Bowser. Se enfrentan al Equipo Mario hasta que conocen a Rosalina, quien les ayuda. Luego, Rosalina ayuda a Mario, Luigi, Toad y Peach a derrotar a Wario, Bowser Jr. y Bowser.</p>
+          <div class="hero-btns">
+            <button class="btn-hero" type="button" onclick="event.stopPropagation();openMovieDetail('SUPER MARIO GALAXY: LA PELÍCULA')">🎟 Comprar boletos</button>
+            <button class="btn-hero2" type="button" onclick="openTmod()">▶ Ver trailer</button>
+          </div>
+        </div>
+        <div class="hero-slide-right">
+          <img src="https://back.cineprox.com/imagenes/banners/415_banner%20mario-02.jpg.jpeg" alt="Super Mario Galaxy: La Película">
+        </div>
+      </div>
+
+      <!-- Slide 2: Confitería Rappi -->
+      <div class="hero-slide">
+        <div class="hero-slide-left" style="background:linear-gradient(135deg,#e67e22 0%,#0E2880 60%,#0D0D0D 100%)">
+          <div class="hero-badge" style="background:rgba(255,255,255,.25)"><span class="dot"></span>Domicilios disponibles</div>
+          <h1 class="hero-title">LA CONFITERÍA<br>MÁS PRO A DOMICILIO</h1>
+          <p class="hero-desc">Desde crispetas saladas o dulces hasta un delicioso perro caliente.</p>
+          <div class="hero-btns">
+            <button class="btn-hero" type="button">🍿 Pedir ahora</button>
+          </div>
+        </div>
+        <div class="hero-slide-right">
+          <img src="https://back.cineprox.com/imagenes/banners/394_BANNER-HOME-GIF-RAPPI-CINEPROX.gif" alt="Confitería a domicilio">
+        </div>
+      </div>
+
+      <!-- Slide 3: Mas Barato por Docena 2-->
+      <div class="hero-slide">
+        <div class="hero-slide-left" style="background:linear-gradient(135deg,#0D0D0D 0%,#1438A6 60%,#0D0D0D 100%)">
+          <div class="hero-badge"><span class="dot"></span>Cartelera</div>
+          <h1 class="hero-title">MÁS BARATO POR DOCENA 2</h1>
+          <p class="hero-desc">Los Baker intentan relajarse durante unas vacaciones de verano con su familia numerosa..., hasta que se topan con su rival definitivo: la enorme familia Murtaugh.</p>
+          <div class="hero-btns">
+            <button class="btn-hero" type="button" onclick="openMovieDetail('MÁS BARATO POR DOCENA 2')">🎬 Más información</button>
+          </div>
+        </div>
+        <div class="hero-slide-right">
+          <img src="https://is1-ssl.mzstatic.com/image/thumb/rQG6g33daDla1R3HalRuEg/1200x675.jpg" alt="Más barato por docena 2">
+        </div>
+      </div>
+
+      <!-- Slide 4: Las Ovejas Detectives -->
+      <div class="hero-slide">
+        <div class="hero-slide-left" style="background:linear-gradient(135deg,#2d5a27 0%,#1438A6 60%,#0D0D0D 100%)">
+          <div class="hero-badge"><span class="dot"></span>En cartelera</div>
+          <h1 class="hero-title">LAS OVEJAS<br>DETECTIVES</h1>
+          <p class="hero-desc">El pastor George, lee misterios de asesinatos a sus ovejas. Cuando lo matan, las ovejas se dan cuenta de que ha sido asesinado y se disponen a resolver el caso por sí mismas, aventurándose desde su pradera hacia el complejo mundo humano.</p>
+          <div class="hero-btns">
+            <button class="btn-hero" type="button" onclick="openMovieDetail('LAS OVEJAS DETECTIVES')">🎬 Ver más</button>
+          </div>
+        </div>
+        <div class="hero-slide-right">
+          <img src="https://back.cineprox.com/imagenes/banners/416_OD%20Cineprox%20Medellin%20Banner%201155x647px%20FECHA.jpg" alt="Las Ovejas Detectives">
+        </div>
+      </div>
+
+      <!-- Slide 5: El Diablo Viste a la Moda 2 -->
+      <div class="hero-slide">
+        <div class="hero-slide-left" style="background:linear-gradient(135deg,#1a0a2e 0%,#2952D4 50%,#0E2880 100%)">
+          <div class="hero-badge"><span class="dot"></span>Gran estreno</div>
+          <h1 class="hero-title">EL DIABLO VISTE<br>A LA MODA 2</h1>
+          <p class="hero-desc">Casi veinte años después de dar vida a los icónicos personajes Miranda, Andy, Emily y Nigel, Meryl Streep, Anne Hathaway, Emily Blunt y Stanley Tucci regresan a las elegantes calles de Nueva York y a las sofisticadas oficinas de la revista Runway en la esperada secuela del fenómeno de 2006 que marcó a toda una generación.</p>
+          <div class="hero-btns">
+            <button class="btn-hero" type="button" onclick="openMovieDetail('EL DIABLO VISTE A LA MODA 2')">🎟 Comprar boletos</button>
+          </div>
+        </div>
+        <div class="hero-slide-right">
+          <img src="https://back.cineprox.com/imagenes/banners/418_Mesa%20de%20trabajo%201%20copia%205-100.jpg" alt="El Diablo Viste a la Moda 2">
+        </div>
+      </div>
+
+      <!-- Slide 6: Día del Niño -->
+      <div class="hero-slide">
+        <div class="hero-slide-left" style="background:linear-gradient(135deg,#f59e0b 0%,#ef4444 45%,#1438A6 100%)">
+          <div class="hero-badge" style="background:rgba(255,255,255,.25)"><span class="dot"></span>Promoción especial</div>
+          <h1 class="hero-title">CELEBRA EL DÍA DEL NIÑO EN CINE COLOMBIA CON SUPER MARIO GALAXY</h1>
+          <p class="hero-desc">Del 23 al 30 de abril disfruta boletas a $8.000 y el combo favorito de los niños por solo $19.900. Válido solo para compras en taquilla.</p>
+          <div class="hero-btns">
+            <button class="btn-hero" type="button" onclick="openMovieDetail('SUPER MARIO GALAXY: LA PELÍCULA')">🎟 Aprovechar ahora</button>
+          </div>
+        </div>
+        <div class="hero-slide-right">
+          <img src="https://back.cineprox.com/imagenes/banners/420_Banner%20Home_Di%CC%81a%20del%20nin%CC%83o%202026.jpg.jpeg" alt="Día del Niño">
+        </div>
+      </div>
+
+    </div><!-- /hero-track -->
+
+    <!-- Arrows -->
+    <button class="caro-arrow caro-prev" onclick="caroMove(-1)" aria-label="Anterior">&#8249;</button>
+    <button class="caro-arrow caro-next" onclick="caroMove(1)" aria-label="Siguiente">&#8250;</button>
+
+    <!-- Dots -->
+    <div class="caro-dots" id="caroDots">
+      <button class="cdot on" onclick="caroGo(0)"></button>
+      <button class="cdot" onclick="caroGo(1)"></button>
+      <button class="cdot" onclick="caroGo(2)"></button>
+      <button class="cdot" onclick="caroGo(3)"></button>
+      <button class="cdot" onclick="caroGo(4)"></button>
+      <button class="cdot" onclick="caroGo(5)"></button>
+    </div>
+  </section>
+
+  <!-- FEATURED -->
+  <div class="sec" id="cartelera">
+    <div class="sec-head reveal-up">
+      <div><div class="sec-title">Destacadas</div></div>
+      <a href="#" class="ver-mas" onclick="scrollCart(event)">Ver todas →</a>
+    </div>
+    <div class="featured-grid stagger-children">
+      <div class="fcard" onclick="openMovieDetail('SUPER MARIO GALAXY: LA PELÍCULA')" style="cursor:pointer">
+        <div class="fcard-img">
+          <div class="mcard-badge badge-cartelera" style="position:absolute;top:10px;left:10px;z-index:1">Cartelera</div>
+          <img src="https://back.cineprox.com/imagenes/banners/415_banner%20mario-02.jpg.jpeg" alt="">
+        </div>
+        <div class="fcard-body">
+          <div class="fcard-title">SUPER MARIO GALAXY: LA PELÍCULA</div>
+          <div class="fcard-desc">Mario y Luigi salen del Reino Champiñón para una aventura intergaláctica. Esta vez, la batalla se traslada al espacio y Bowser Jr será quien se les cruce en el camino. Con aliados inesperados, el destino del universo queda en juego.</div>
+          <div style="font-size:.75rem;color:var(--text3);margin-bottom:.5rem">2026 · Animada · ⭐ 9.8</div>
+          <button class="fcard-btn" onclick="event.stopPropagation();openMovieDetail('SUPER MARIO GALAXY: LA PELÍCULA')">🎟 Comprar boletos</button>
+        </div>
+      </div>
+      <div class="fcard" style="cursor:pointer">
+        <div class="fcard-img" style="background:linear-gradient(135deg,#1a0a2e,#2d1054);display:flex;align-items:center;justify-content:center">
+          <div class="mcard-badge badge-prox" style="position:absolute;top:10px;left:10px;z-index:1">Próximamente</div>
+          <span style="font-size:3rem;opacity:.3">🎬</span>
+        </div>
+        <div class="fcard-body">
+          <div class="fcard-title">Próxima Función</div>
+          <div class="fcard-desc">Pronto anunciaremos la siguiente película en cartelera. ¡No te la pierdas! Regístrate para recibir notificaciones.</div>
+          <div style="font-size:.75rem;color:var(--text3);margin-bottom:.5rem">2025 · Próximamente</div>
+          <button class="fcard-btn">🔔 Notificarme</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMO BANNER -->
+  <div class="promo-banner" style="border-radius:0;margin:0">
+    <div class="pb-text">
+      <h3>🎉 Función VIP — Asiento Premium</h3>
+      <p>Reserva el asiento VIP central y disfruta la mejor experiencia. ¡Solo una unidad disponible!</p>
+    </div>
+    <button class="pb-btn" onclick="goSeats(event)">Reservar ahora</button>
+  </div>
+
+  <!-- FILTROS + CATÁLOGO -->
+  <div class="sec" style="padding-top:2.5rem">
+    <div class="sec-head reveal-up">
+      <div><div class="sec-title">Catálogo completo</div><div class="sec-sub">Toda la selección de Cine Colombia</div></div>
+    </div>
+    <div class="filters stagger-children">
+      <button class="fpill on" onclick="filterCat(this,'all')">Todas</button>
+      <button class="fpill" onclick="filterCat(this,'accion')">Acción</button>
+      <button class="fpill" onclick="filterCat(this,'comedia')">Comedia</button>
+      <button class="fpill" onclick="filterCat(this,'romance')">Romance</button>
+      <button class="fpill" onclick="filterCat(this,'drama')">Drama</button>
+      <button class="fpill" onclick="filterCat(this,'animada')">Animada</button>
+      <button class="fpill" onclick="filterCat(this,'suspenso')">Suspenso</button>
+      <button class="fpill" onclick="filterCat(this,'thriller')">Thriller</button>
+      <button class="fpill" onclick="filterCat(this,'documental')">Documental</button>
+      <button class="fpill" onclick="filterCat(this,'ciencia-ficción')">Ciencia Ficción</button>
+      <button class="fpill" onclick="filterCat(this,'anime')">Anime</button>
+    </div>
+    <div class="mgrid wide" id="movieGrid">
+    </div>
+  </div>
+
+  <!-- SECOND PROMO -->
+  <div class="promo-banner" style="background:linear-gradient(135deg,#0E2880,#f97316);border-radius:0;margin:0">
+    <div class="pb-text">
+      <h3>🍿 Combos disponibles</h3>
+      <p>Agrega tu combo al reservar — crispetas, gaseosas y más. ¡Todo listo para tu llegada!</p>
+    </div>
+    <button class="pb-btn" style="color:#0E2880" onclick="scrollCombos(event)">Ver combos</button>
+  </div>
+
+  <!-- COMBOS SECTION -->
+  <div class="sec" id="combos-section">
+    <div class="sec-head reveal-up">
+      <div><div class="sec-title">🍿 Nuestros Combos</div><div class="sec-sub">Pídelo al reservar y lo tenemos listo a tu llegada</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem" class="stagger-children">
+      <!-- Combo Básico -->
+      <div style="background:#fff;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 16px rgba(20,56,166,.08)">
+        <img src="https://www.cineprox.com/assets/images/procinal/alimentos/confiteria/productos/combo-clasico.jpg" alt="Combo Básico" style="width:100%;height:220px;object-fit:cover;display:block" onerror="this.style.background='#dde4f5';this.style.height='120px'">
+        <div style="padding:1.1rem">
+          <div style="font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.35rem">Combo Básico</div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.55">Gaseosa mediana + Crispetas pequeñas. El combo perfecto para disfrutar tu película.</div>
+        </div>
+      </div>
+      <!-- Combo Dúo -->
+      <div style="background:#fff;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 16px rgba(20,56,166,.08)">
+        <img src="https://www.cineprox.com/assets/images/procinal/alimentos/confiteria/productos/combo-duo.jpg" alt="Combo Dúo" style="width:100%;height:220px;object-fit:cover;display:block" onerror="this.style.background='#dde4f5';this.style.height='120px'">
+        <div style="padding:1.1rem">
+          <div style="font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.35rem">Combo Dúo</div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.55">2 gaseosas medianas + Crispetas medianas. Ideal para compartir con alguien especial.</div>
+        </div>
+      </div>
+      <!-- Combo Premium -->
+      <div style="background:#fff;border-radius:var(--r);border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 16px rgba(20,56,166,.08)">
+        <img src="https://www.cineprox.com/assets/images/procinal/alimentos/confiteria/productos/super-combo.jpg" alt="Combo Premium" style="width:100%;height:220px;object-fit:cover;display:block" onerror="this.style.background='#dde4f5';this.style.height='120px'">
+        <div style="padding:1.1rem">
+          <div style="font-size:1rem;font-weight:800;color:var(--text);margin-bottom:.35rem">Combo Premium VIP</div>
+          <div style="font-size:.82rem;color:var(--text2);line-height:1.55">Crispetas grandes + 2 bebidas + Nachos. La experiencia completa para los verdaderos cinéfilos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ SELECCIONAR PELÍCULA ══ -->
+<div class="pg" id="pg-movie-select">
+  <div class="sec">
+    <div class="sec-hd">
+      <div><div class="sht">Elige tu película</div><div class="shs">Selecciona la película para reservar</div></div>
+      <button class="btnO" onclick="backHome(event)">← Volver</button>
+    </div>
+    <div class="movie-select-grid" id="movieSelectGrid"></div>
+  </div>
+</div>
+
+<!-- ══ ASIENTOS ══ -->
+<div class="pg" id="pg-seats">
+  <div class="sec">
+    <div class="progbar">
+      <div class="pstep on" id="st1">🛋 Asientos</div>
+      <div class="pstep" id="st2">🍿 Combo</div>
+      <div class="pstep" id="st3">📋 Datos</div>
+      <div class="pstep" id="st4">🎟 Entrada</div>
+    </div>
+    <div class="sec-hd">
+      <div><div class="sht">Elige tus asientos</div><div class="shs">Función 9:00 PM · Sala Principal IMAX · Hoy</div></div>
+      <button class="btnO" onclick="backHome(event)">← Volver</button>
+    </div>
+    <div class="cinema-outer">
+      <div><span class="scounter">Seleccionados: <span class="scnt" id="seatCounter">0</span></span></div>
+      <br>
+      <div class="cinema-box">
+        <div class="screen-area"><div class="screenbar"></div><div class="screentxt">Pantalla principal</div></div>
+        <div class="couchr">
+          <div class="couchc">
+            <div class="couchlbl">Mueble Izquierdo</div>
+            <div class="couchs">
+              <div class="seat" data-seat="1-I" onclick="selectSeat(this)"><div class="si">🛋</div><div class="sn">1-I</div></div>
+              <div class="seat" data-seat="2-I" onclick="selectSeat(this)"><div class="si">🛋</div><div class="sn">2-I</div></div>
+              <div class="seat" data-seat="3-I" onclick="selectSeat(this)"><div class="si">🛋</div><div class="sn">3-I</div></div>
+            </div>
+          </div>
+          <div class="vipc">
+            <div class="viplbl">★ VIP Premium</div>
+            <div class="seat seat-vip" data-seat="PREMIUM" onclick="selectSeat(this)"><div class="si">🛏️</div><div class="sn">VIP</div></div>
+          </div>
+          <div class="couchc">
+            <div class="couchlbl">Mueble Derecho</div>
+            <div class="couchs">
+              <div class="seat" data-seat="1-D" onclick="selectSeat(this)"><div class="si">🛋</div><div class="sn">1-D</div></div>
+              <div class="seat" data-seat="2-D" onclick="selectSeat(this)"><div class="si">🛋</div><div class="sn">2-D</div></div>
+              <div class="seat" data-seat="3-D" onclick="selectSeat(this)"><div class="si">🛋</div><div class="sn">3-D</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="sleg">
+          <div class="legit"><div class="legdot fr"></div>Disponible</div>
+          <div class="legit"><div class="legdot oc"></div>Ocupado</div>
+          <div class="legit"><div class="legdot vp"></div>VIP Premium</div>
+          <div class="legit"><div class="legdot sl"></div>Seleccionado</div>
+        </div>
+      </div>
+      <div class="ibar">
+        <div class="ibar-t">Seleccionados: <strong id="selectedSeatLabel">Ninguno</strong><div class="ibar-s" id="selectedSeatsList"></div></div>
+        <button class="btnP" id="btnContinue" onclick="goToCombo()" disabled>Continuar →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMBO ══ -->
+<div class="pg" id="pg-combo">
+  <div class="sec">
+    <div class="progbar"><div class="pstep dn">✓ Asientos</div><div class="pstep on">🍿 Combo</div><div class="pstep">📋 Datos</div><div class="pstep">🎟 Entrada</div></div>
+    <div class="sec-hd">
+      <div><div class="sht">¿Quieres un combo?</div><div class="shs">Pídelo ahora o al llegar al cine</div></div>
+      <button class="btnO" onclick="showPg('pg-seats')">← Volver</button>
+    </div>
+    <div class="cgrid" style="max-width:640px">
+      <div class="ccard" id="combo-now" onclick="selCombo('now')"><div class="ci">🎯</div><div class="cn">Escoger ahora</div><div class="cd">Lo tendremos listo a tu llegada</div></div>
+      <div class="ccard" id="combo-later" onclick="selCombo('later')"><div class="ci">🎬</div><div class="cn">Al llegar al cine</div><div class="cd">Ves las opciones en la dulcería</div></div>
+    </div>
+    <div id="combo-submenu" style="display:none;max-width:640px">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text3);margin-bottom:.75rem">Elige tu combo:</div>
+      <div class="subgrid">
+        <div class="ccard" id="sub-basic" onclick="selSub('basic')"><div class="combo-img-wrap"><img src="https://www.cineprox.com/assets/images/procinal/alimentos/confiteria/productos/combo-clasico.jpg" alt="Combo Básico" onerror="this.style.display='none'"></div><div class="cn">Básico</div><div class="cd">Gaseosa + Crispetas pequeñas</div></div>
+        <div class="ccard" id="sub-duo" onclick="selSub('duo')"><div class="combo-img-wrap"><img src="https://www.cineprox.com/assets/images/procinal/alimentos/confiteria/productos/combo-duo.jpg" alt="Combo Dúo" onerror="this.style.display='none'"></div><div class="cn">Dúo</div><div class="cd">2 gaseosas + Crispetas medianas</div></div>
+        <div class="ccard" id="sub-premium" onclick="selSub('premium')"><div class="combo-img-wrap"><img src="https://www.cineprox.com/assets/images/procinal/alimentos/confiteria/productos/super-combo.jpg" alt="Combo Premium" onerror="this.style.display='none'"></div><div class="cn">Premium</div><div class="cd">Crispetas grandes + 2 bebidas + Nachos</div></div>
+      </div>
+    </div>
+    <div style="margin-top:1.4rem;max-width:640px">
+      <button class="btnP lg" id="btnComboNext" onclick="goToForm()" disabled style="width:100%">Continuar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DATOS ══ -->
+<div class="pg" id="pg-form">
+  <div class="sec">
+    <div class="progbar"><div class="pstep dn">✓ Asientos</div><div class="pstep dn">✓ Combo</div><div class="pstep on">📋 Datos</div><div class="pstep">🎟 Entrada</div></div>
+    <div class="sec-hd">
+      <div><div class="sht">Tus datos</div><div class="shs">Confirma tu reserva</div></div>
+      <button class="btnO" onclick="showPg('pg-combo')">← Volver</button>
+    </div>
+    <div class="fpanel">
+      <div class="sumbox">
+        <div class="sumrow"><span class="sk">Película</span><span class="sv" id="formMovieLabel">Super Mario Galaxy: La Película</span></div>
+        <div class="sumrow"><span class="sk">Función</span><span class="sv">9:00 PM · Hoy · IMAX</span></div>
+        <div class="sumrow"><span class="sk">Asientos</span><span class="sv" id="formSeatLabel" style="color:var(--pu)">—</span></div>
+        <div class="sumrow"><span class="sk">Combo</span><span class="sv" id="formComboLabel" style="color:var(--pu)">—</span></div>
+      </div>
+      <div class="fg"><label class="fl">Nombre completo *</label><input class="fi" type="text" id="inputName" placeholder="Ej: Juan García"></div>
+      <div class="fg"><label class="fl">Teléfono / Celular *</label><input class="fi" type="tel" id="inputPhone" placeholder="Ej: 3001234567"></div>
+      <div class="fg"><label class="fl">Correo electrónico *</label><input class="fi" type="email" id="inputEmail" placeholder="Ej: juan@correo.com"></div>
+      <div class="ferr" id="formError">⚠ Completa todos los campos correctamente.</div>
+      <button class="btnP lg" onclick="submitForm()" style="width:100%">🎟 Confirmar compra</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOADING ══ -->
+<div class="pg" id="pg-loading">
+  <div class="sec" style="min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+    <div class="loading-spinner"></div>
+    <div style="font-size:1.3rem;font-weight:800;color:var(--pu);margin-top:1.5rem">Procesando tu compra...</div>
+    <div style="font-size:.85rem;color:var(--text2);margin-top:.5rem">Por favor espera, esto puede tomar unos segundos.</div>
+    <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
+  </div>
+</div>
+
+<!-- ══ TICKET ══ -->
+<div class="pg" id="pg-ticket">
+  <div class="sec">
+    <div class="progbar"><div class="pstep dn">✓ Asientos</div><div class="pstep dn">✓ Combo</div><div class="pstep dn">✓ Datos</div><div class="pstep on">🎟 Entrada</div></div>
+    <div class="twrap">
+      <div class="sstrip"><span class="ico">✅</span><div><strong>¡Compra confirmada!</strong><span id="ticketEmail"></span></div></div>
+      <div class="tcard">
+        <div class="ttop"><div><div class="tlogo">CINE COLOMBIA</div><div class="ttype">Entrada Digital Oficial</div></div><div style="font-size:2rem">🎟</div></div>
+        <div class="tnotch"><div class="tnc"></div></div>
+        <div class="tbody">
+          <div class="tmovie" id="ticketMovie">SUPER MARIO GALAXY:<br>LA PELÍCULA</div>
+
+          <!-- Datos del comprador -->
+          <div style="background:#eaedfa;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #c8d0ed">
+            <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:.75rem">📋 Datos del Comprador</div>
+            <div class="tgrid">
+              <div><div class="tfl">Nombre</div><div class="tfv" id="ticketName">—</div></div>
+              <div><div class="tfl">Fecha de compra</div><div class="tfv" id="ticketDate">—</div></div>
+              <div><div class="tfl">Teléfono</div><div class="tfv" id="ticketPhone">—</div></div>
+              <div><div class="tfl">Correo</div><div class="tfv" style="font-size:.72rem;word-break:break-all" id="ticketEmailField">—</div></div>
+            </div>
+          </div>
+
+          <!-- Info de la boleta -->
+          <div style="background:#f0fdf4;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #86efac">
+            <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#16a34a;margin-bottom:.75rem">🎬 Información de las Boletas</div>
+            <div class="tgrid">
+              <div><div class="tfl">Clasificación</div><div class="tfv" id="ticketRating">7 Años</div></div>
+              <div><div class="tfl">Función</div><div class="tfv">9:00 PM</div></div>
+              <div><div class="tfl">Fecha función</div><div class="tfv" id="ticketFuncionDate">Hoy</div></div>
+              <div><div class="tfl">Sala</div><div class="tfv">Principal · IMAX</div></div>
+            </div>
+            <div class="thl" style="margin-top:.75rem"><div><div class="thl-l">Ubicaciones / Asientos</div><div class="thl-v" id="ticketSeat">—</div></div><span style="font-size:1.7rem">🛋</span></div>
+            <div style="display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap">
+              <div style="background:#fff;border-radius:8px;padding:.4rem .8rem;font-size:.72rem;font-weight:700;color:var(--text2)">Cantidad: <span id="ticketQty" style="color:var(--pu)">—</span></div>
+            </div>
+            <div class="thl" style="margin-top:.5rem"><div><div class="thl-l">Combo</div><div class="thl-v" id="ticketCombo" style="font-size:.88rem">—</div></div><span style="font-size:1.7rem">🍿</span></div>
+          </div>
+
+          <!-- QR Code -->
+          <div class="tbc">
+            <div style="text-align:center;margin-bottom:.5rem;font-size:.65rem;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px">Código QR — Muéstralo al ingresar</div>
+            <div id="qrcode" style="display:flex;justify-content:center;margin-bottom:.75rem"></div>
+            <div class="tcode" id="ticketCode">JCMX-000000</div>
+          </div>
+        </div>
+      </div>
+      <div class="tacts"><button class="btnP" onclick="window.print()">🖨 Imprimir</button><button class="btnO" onclick="restart()">← Nueva compra</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-in">
+    <div class="footer-top">
+      <div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/CineColombia.png" alt="Cine Colombia" class="footer-logo">
+        <div class="footer-desc">Tu experiencia de cine en casa. Reserva tus asientos, elige tu combo y disfruta la mejor función.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <a href="#" onclick="backHome(event)">Inicio</a>
+        <a href="#" onclick="scrollCart(event)">Cartelera</a>
+        <a href="#" onclick="goSeats(event)">Reservar</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="#">Funciónes</a>
+        <a href="#">Sala Principal IMAX</a>
+        <a href="#">Contacto</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 Cine Colombia · Tu cine en Colombia</div>
+      <button id="secretTap" title="">🎬</button>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ ADMIN OVERLAY ══ -->
+<div id="adminOverlay">
+  <div id="adminLogin">
+    <div class="abox">
+      <button class="ax" onclick="closeAdmin()">✕</button>
+      <div class="alogo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/CineColombia.png" alt="Cine Colombia">
+        <div class="al-s">Panel de administración</div>
+      </div>
+      <div class="atitle">🔐 Acceso exclusivo</div>
+      <div class="af"><label>Usuario</label><input type="text" id="aUser" placeholder="Ingresa tu usuario" autocomplete="username"></div>
+      <div class="af"><label>Contraseña</label><input type="password" id="aPass" placeholder="Contraseña" autocomplete="current-password"></div>
+      <button class="alnbtn" onclick="doAdminLogin()">🚀 Entrar al panel</button>
+      <div class="alnerr" id="aLoginErr">❌ Usuario o contraseña incorrectos.</div>
+    </div>
+  </div>
+  <div id="adminPanel2">
+    <div class="ahdr"><div class="ahdr-in"><div class="ahdr-logo">Cine Colombia</div><div class="ahdr-badge">ADMIN</div><div class="ahdr-btns"><button class="abtn qr" onclick="openQrScanner()">📷 Escanear QR</button><button class="abtn rf" onclick="adminLoad()">🔄 Actualizar</button><button class="abtn dn" onclick="adminClear()">🗑️ Limpiar todo</button><button class="abtn ou" onclick="adminLogout()">🚪 Salir</button></div></div></div>
+    <div class="amain">
+      <div class="astats">
+        <div class="astat"><div class="astat-l">Total reservas</div><div class="astat-v g" id="as1">0</div></div>
+        <div class="astat"><div class="astat-l">Asientos ocupados</div><div class="astat-v r" id="as2">0</div></div>
+        <div class="astat"><div class="astat-l">Asientos libres</div><div class="astat-v gr" id="as3">7</div></div>
+        <div class="astat"><div class="astat-l">Última reserva</div><div class="astat-v w" id="as4">—</div></div>
+      </div>
+      <div class="asm"><div class="asm-t">🗺️ Estado de asientos en tiempo real</div><div class="asm-b" id="asmapbody"></div></div>
+      <div class="atbl"><div class="atbl-hd"><div class="atbl-t">📋 Reservas registradas <span class="admin-sync-badge"><span class="admin-sync-dot"></span>En vivo</span></div><div style="display:flex;gap:.45rem"><button class="abtn dn" onclick="adminClear()">🗑️ Borrar todo</button></div></div><div class="atbl-sc"><div id="atblc"><div class="admin-loading">⏳ Cargando reservas...</div></div></div><div class="admin-res-cards" id="adminCards"><div class="admin-loading">⏳ Cargando reservas...</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- QR SCANNER MODAL -->
+<div id="qrScannerOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1.5rem">
+  <div style="background:#fff;border-radius:20px;max-width:520px;width:100%;padding:2rem;position:relative;max-height:90vh;overflow-y:auto">
+    <button onclick="closeQrScanner()" style="position:absolute;top:1rem;right:1rem;width:34px;height:34px;border-radius:50%;background:#dde4f5;border:none;color:var(--pu);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+    <div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:1rem">📷 Escanear Código QR</div>
+    <div id="qrReaderContainer" style="border-radius:12px;overflow:hidden;margin-bottom:1rem"></div>
+    <div id="qrManualEntry" style="margin-top:.75rem">
+      <div style="font-size:.75rem;font-weight:700;color:var(--text3);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:1px">O ingresa el código manualmente:</div>
+      <div style="display:flex;gap:.5rem">
+        <input id="qrManualCode" type="text" placeholder="JCMX-XXXXXX" style="flex:1;padding:.65rem 1rem;border:1.5px solid #c8d0ed;border-radius:10px;font-size:.88rem;font-family:'Poppins',sans-serif;outline:none">
+        <button onclick="processQrCode(document.getElementById('qrManualCode').value)" style="background:var(--grad);color:#fff;border:none;border-radius:10px;padding:.65rem 1.2rem;font-weight:700;cursor:pointer;font-size:.82rem;font-family:'Poppins',sans-serif">Buscar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- QR RESULT MODAL -->
+<div id="qrResultOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100000;backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1.5rem">
+  <div style="background:#fff;border-radius:20px;max-width:540px;width:100%;padding:2rem;position:relative;max-height:90vh;overflow-y:auto">
+    <button onclick="closeQrResult()" style="position:absolute;top:1rem;right:1rem;width:34px;height:34px;border-radius:50%;background:#dde4f5;border:none;color:var(--pu);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+    <div id="qrResultContent"></div>
+  </div>
+</div>
+
+<script>
+// ─── MOVIE DATA ───
+var MOVIES = [
+  {id:'MÁS BARATO POR DOCENA 2',title:'MÁS BARATO POR DOCENA 2',orig:'Cheaper by the Dozen 2',year:'2005',genre:'comedia',badge:'badge-cartelera',label:'Cartelera',img:'https://static.wikia.nocookie.net/doblaje/images/b/b7/Docena2.jpg/revision/latest?cb=20200713001442&path-prefix=es',trailer:'https://www.youtube.com/embed/ZY3ymKGEDIU?autoplay=1&rel=0',synopsis:'Los Baker intentan relajarse durante unas vacaciones de verano con su familia numerosa..., hasta que se topan con su rival definitivo: la enorme familia Murtaugh.',release:'21 de diciembre de 2005',country:'ESTADOS UNIDOS',duration:'93 min',rating:'+7',action:true},
+  {id:'EL DIABLO VISTE A LA MODA 2',title:'EL DIABLO VISTE A LA MODA 2',orig:'THE DEVIL WEARS PRADA 2',year:'2026',genre:'comedia',badge:'badge-preventa',label:'Preventa',img:'https://www.pantallascineprox.com/img/peliculas/1984.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/aXdjJbVrJeg?autoplay=1&rel=0',synopsis:'Casi veinte años después, Miranda, Andy, Emily y Nigel regresan a las elegantes calles de Nueva York y a las sofisticadas oficinas de la revista Runway en la esperada secuela del fenómeno de 2006.',release:'2026',country:'ESTADOS UNIDOS',duration:'115 min',rating:'7 Años'},
+  {id:'MICHAEL',title:'MICHAEL',orig:'MICHAEL',year:'2026',genre:'drama',badge:'badge-estreno',label:'Estrenos',img:'https://www.pantallascineprox.com/img/peliculas/1986.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/dn_y5vISz44?autoplay=1&rel=0',synopsis:'Michael es un retrato íntimo de la vida y el legado de Michael Jackson, uno de los artistas más influyentes que el mundo haya conocido. Un biopic épico que repasa su ascenso, genio y controversias.',release:'2026',country:'ESTADOS UNIDOS',duration:'140 min',rating:'13 Años',action:true},
+  {id:'SUPER MARIO GALAXY: LA PELÍCULA',title:'SUPER MARIO GALAXY: LA PELÍCULA',orig:'THE SUPER MARIO GALAXY: MOVIE',year:'2026',genre:'animada',badge:'badge-cartelera',label:'Cartelera',img:'https://www.pantallascineprox.com/img/peliculas/1983.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/PV6kfoIIjTQ?autoplay=1&rel=0',synopsis:'Mario y Luigi salen del Reino Champiñón para una aventura intergaláctica. Esta vez, la batalla se traslada al espacio y Bowser Jr será quien se les cruce en el camino. Con aliados inesperados, el destino del universo queda en juego.',release:'01/Abril/2026',country:'ESTADOS UNIDOS',duration:'100 min',rating:'7 Años',action:true},
+  {id:'MAMUT: EL REGRESO DE LOS DINOSAURIOS',title:'MAMUT: EL REGRESO DE LOS DINOSAURIOS',orig:'MAMUT',year:'2026',genre:'accion',badge:'badge-estreno',label:'Estrenos',img:'https://www.pantallascineprox.com/img/peliculas/2107.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/AvNY-WIgKpM?autoplay=1&rel=0',synopsis:'Una expedición científica descubre que los mamuts y otros animales prehistóricos han sido clonados en secreto. Cuando escapan, el caos se desata y solo un equipo valiente puede detenerlos.',release:'2026',country:'ESTADOS UNIDOS',duration:'110 min',rating:'7 Años',action:true},
+  {id:'CHAO: LA SIRENA',title:'CHAO: LA SIRENA',orig:'CHAO: THE MERMAID',year:'2026',genre:'animada',badge:'badge-estreno',label:'Estrenos',img:'https://www.pantallascineprox.com/img/peliculas/2119.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/DtlImmAl4KE?autoplay=1&rel=0',synopsis:'Chao, una joven sirena, debe abandonar el fondo del mar para cumplir una misión en el mundo de los humanos. Una historia de amistad, valentía y descubrimiento.',release:'2026',country:'COLOMBIA',duration:'90 min',rating:'Todos',action:true},
+  {id:'LA POSESIÓN DE LA MOMIA',title:'LA POSESIÓN DE LA MOMIA',orig:'THE MUMMY POSSESSION',year:'2026',genre:'suspenso',badge:'badge-cartelera',label:'Cartelera',img:'https://www.pantallascineprox.com/img/peliculas/2077.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/FgufoUtQeeY?autoplay=1&rel=0',synopsis:'Una momia milenaria es despertada en un museo de historia natural y comienza a poseer a los visitantes. Un arqueólogo y una parapsicóloga deben detenerla antes de que el terror se extienda.',release:'2026',country:'ESTADOS UNIDOS',duration:'105 min',rating:'13 Años',action:true},
+  {id:'PROYECTO FIN DEL MUNDO',title:'PROYECTO FIN DEL MUNDO',orig:'END OF WORLD PROJECT',year:'2026',genre:'ciencia-ficción',badge:'badge-cartelera',label:'Cartelera',img:'https://www.pantallascineprox.com/img/peliculas/2029.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/ZAeHIH-IUNo?autoplay=1&rel=0',synopsis:'Un científico descubre que un meteorito destruirá la Tierra en 72 horas. Con recursos limitados y tiempo en contra, un equipo de élite ejecuta un último plan para salvar a la humanidad.',release:'2026',country:'ESTADOS UNIDOS',duration:'125 min',rating:'13 Años',action:true},
+  {id:'BILLIE EILISH: HIT ME HARD AND SOFT',title:'BILLIE EILISH: HIT ME HARD AND SOFT',orig:'BILLIE EILISH: HIT ME HARD AND SOFT',year:'2026',genre:'documental',badge:'badge-preventa',label:'Preventa',img:'https://www.pantallascineprox.com/img/peliculas/2118.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/qU5eYfRy-jA?autoplay=1&rel=0',synopsis:'Documental exclusivo del álbum HIT ME HARD AND SOFT de Billie Eilish. Un viaje íntimo por la creación del disco, con imágenes detrás de cámaras y presentaciones en vivo.',release:'2026',country:'ESTADOS UNIDOS',duration:'95 min',rating:'Todos'},
+  {id:'SLIME: LÁGRIMAS DEL MAR CELESTE',title:'SLIME: LÁGRIMAS DEL MAR CELESTE',orig:'SLIME: TEARS OF THE CELESTIAL SEA',year:'2026',genre:'animada',badge:'badge-preventa',label:'Preventa',img:'https://www.pantallascineprox.com/img/peliculas/2133.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/n2SWrLz99kQ?autoplay=1&rel=0',synopsis:'Una criatura de slime emprende un viaje por un mundo mágico en busca de sus lágrimas perdidas, que tienen el poder de restaurar el color a un océano que se ha vuelto gris.',release:'2026',country:'JAPÓN',duration:'88 min',rating:'Todos'},
+  {id:'BOULEVARD',title:'BOULEVARD',orig:'BOULEVARD',year:'2026',genre:'romance',badge:'badge-preventa',label:'Preventa',img:'https://www.pantallascineprox.com/img/peliculas/2134.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/bP22mAztyQQ?autoplay=1&rel=0',synopsis:'En las calles de París, dos extraños se encuentran repetidamente por azar. Lo que comienza como coincidencias se transforma en un romance que desafía sus vidas planificadas.',release:'2026',country:'FRANCIA',duration:'102 min',rating:'13 Años'},
+  {id:'LA PRESENCIA DEL VACÍO',title:'LA PRESENCIA DEL VACÍO',orig:'THE PRESENCE OF THE VOID',year:'2026',genre:'thriller',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2061.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/D31VvJdD62U?autoplay=1&rel=0',synopsis:'Una psicóloga forense investiga una serie de crímenes sin motivo aparente. Mientras profundiza en la mente de los sospechosos, descubre que ella misma podría ser la próxima víctima.',release:'Próximamente 2026',country:'REINO UNIDO',duration:'118 min',rating:'16 Años'},
+  {id:'POLLITOS AL RESCATE',title:'POLLITOS AL RESCATE',orig:'CHICKS TO THE RESCUE',year:'2026',genre:'animada',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2092.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/tLBZRxaW5iE?autoplay=1&rel=0',synopsis:'Un grupo de pollitos valientes y aventureros deberán salvar su granja de las garras de un zorro malvado. Con mucho humor y acción, esta historia enseña el valor del trabajo en equipo.',release:'Próximamente 2026',country:'ESTADOS UNIDOS',duration:'85 min',rating:'Todos'},
+  {id:'EXIT 8',title:'EXIT 8',orig:'EXIT 8',year:'2026',genre:'suspenso',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2108.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/dSuWDEckWVM?autoplay=1&rel=0',synopsis:'Basado en el popular videojuego del mismo nombre. Un hombre queda atrapado en un laberinto de pasillos idénticos y debe encontrar anomalías para escapar antes de que sea demasiado tarde.',release:'Próximamente 2026',country:'JAPÓN',duration:'95 min',rating:'13 Años'},
+  {id:'PRUEBAS DE AMOR',title:'PRUEBAS DE AMOR',orig:'LOVE TRIALS',year:'2026',genre:'drama',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2132.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/AOPzY51iQPg?autoplay=1&rel=0',synopsis:'Tres parejas en distintas etapas de su relación enfrentan la misma pregunta: ¿el amor es suficiente? Un drama coral sobre la complejidad de las relaciones modernas.',release:'Próximamente 2026',country:'COLOMBIA',duration:'108 min',rating:'13 Años'},
+  {id:'LAS OVEJAS DETECTIVES',title:'LAS OVEJAS DETECTIVES',orig:'DETECTIVE SHEEP',year:'2026',genre:'comedia',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2030.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/k2ZZ344rso0?autoplay=1&rel=0',synopsis:'El pastor George lee misterios de asesinatos a sus ovejas. Cuando lo matan, las ovejas se dan cuenta de que ha sido asesinado y se disponen a resolver el caso por sí mismas, aventurándose al mundo humano.',release:'Próximamente 2026',country:'ALEMANIA',duration:'92 min',rating:'7 Años'},
+  {id:'LEJOS - AQUÍ',title:'LEJOS - AQUÍ',orig:'FAR - HERE',year:'2026',genre:'drama',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2093.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/-Ig-QuHcpiY?autoplay=1&rel=0',synopsis:'Una historia de migración y reencuentro. Dos hermanos separados por el océano intentan mantener viva su familia desde continentes distintos, mientras cada uno persigue sus sueños.',release:'Próximamente 2026',country:'COLOMBIA',duration:'110 min',rating:'7 Años'},
+  {id:'PEQUEÑOS MONSTRUOS',title:'PEQUEÑOS MONSTRUOS',orig:'LITTLE MONSTERS',year:'2026',genre:'animada',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2096.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/HBXCvIgUcjQ?autoplay=1&rel=0',synopsis:'En un mundo donde los monstruos y los humanos conviven, un grupo de pequeños monstruos del colegio decide demostrar que son tan valientes como sus padres. Aventuras y carcajadas garantizadas.',release:'Próximamente 2026',country:'ESTADOS UNIDOS',duration:'82 min',rating:'Todos'},
+  {id:'CREPÚSCULO: LUNA NUEVA',title:'CREPÚSCULO: LUNA NUEVA',orig:'TWILIGHT: NEW MOON',year:'2026',genre:'romance',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2101.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/b0Us_hugDLQ?autoplay=1&rel=0',synopsis:'Reinicio de la saga Crepúsculo. Bella Swan y Edward Cullen viven su amor imposible entre vampiros y hombres lobo, en un mundo donde los monstruos conviven con los humanos.',release:'Próximamente 2026',country:'ESTADOS UNIDOS',duration:'130 min',rating:'13 Años'},
+  {id:'JUGADA MAESTRA',title:'JUGADA MAESTRA',orig:'MASTER MOVE',year:'2026',genre:'accion',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2112.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/Rx9EoVZKy_o?autoplay=1&rel=0',synopsis:'Un maestro del ajedrez es reclutado por una agencia de inteligencia para resolver un complot internacional. Sus habilidades estratégicas resultan ser el arma más poderosa en este juego de alto riesgo.',release:'Próximamente 2026',country:'ESTADOS UNIDOS',duration:'122 min',rating:'13 Años'},
+  {id:'ZONA DE RIESGO',title:'ZONA DE RIESGO',orig:'DANGER ZONE',year:'2026',genre:'accion',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2113.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/iNls3bZ4rBA?autoplay=1&rel=0',synopsis:'Un piloto de combate retirado es llamado nuevamente al servicio cuando una amenaza sin precedentes emerge en el Pacífico. Solo él conoce el territorio y puede salvar a miles de civiles.',release:'Próximamente 2026',country:'ESTADOS UNIDOS',duration:'128 min',rating:'13 Años'},
+  {id:'PONYO Y EL SECRETO DE LA SIRENITA',title:'PONYO Y EL SECRETO DE LA SIRENITA',orig:'PONYO AND THE LITTLE MERMAID SECRET',year:'2026',genre:'anime',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2114.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/n24T9bG4deY?autoplay=1&rel=0',synopsis:'Ponyo, la pequeña criatura del mar, descubre el secreto más antiguo de las sirenas. Una aventura mágica que mezcla la magia del océano con el mundo de los humanos.',release:'Próximamente 2026',country:'JAPÓN',duration:'96 min',rating:'Todos'},
+  {id:'EL JUEGO DE LA VIDA',title:'EL JUEGO DE LA VIDA',orig:'THE GAME OF LIFE',year:'2026',genre:'documental',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2120.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/-2FzeSOGakw?autoplay=1&rel=0',synopsis:'Documental que explora cómo los juegos de mesa y videojuegos han moldeado la cultura, la educación y las relaciones humanas a través de la historia.',release:'Próximamente 2026',country:'REINO UNIDO',duration:'98 min',rating:'Todos'},
+  {id:'MODIGLIANI: TRES DÍAS EN MONTPARNASSE',title:'MODIGLIANI: TRES DÍAS EN MONTPARNASSE',orig:'MODIGLIANI: THREE DAYS IN MONTPARNASSE',year:'2026',genre:'comedia',badge:'badge-pronto',label:'Pronto',img:'https://www.pantallascineprox.com/img/peliculas/2125.jpg?v=1.0.50',trailer:'https://www.youtube.com/embed/Kj0Jr5vnvOI?autoplay=1&rel=0',synopsis:'Una comedia dramática sobre los últimos tres días de Amedeo Modigliani en París. Arte, amor, locura y pasión en el barrio bohemio de Montparnasse en los años 20.',release:'Próximamente 2026',country:'FRANCIA / ITALIA',duration:'112 min',rating:'13 Años'},
+];
+
+function buildCard(m){
+  var safeId = m.id.replace(/'/g,"\\'");
+  return '<div class="mcard fade-in" data-genre="'+m.genre+'" onclick="openMovieDetail(\''+safeId+'\')" style="cursor:pointer">'+
+    '<div class="mcard-img">'+
+    '<div class="mcard-badge '+m.badge+'">'+m.label+'</div>'+
+    (m.img ? '<img src="'+m.img+'" alt="'+m.title+'" onerror="this.parentElement.style.background=\'linear-gradient(135deg,#dde4f5,#c8d0ed)\'">' : '<div style="width:100%;height:100%;background:linear-gradient(135deg,#dde4f5,#c8d0ed);display:flex;align-items:center;justify-content:center"><span style=\'font-size:2rem;opacity:.4\'>🎬</span></div>')+
+    '</div>'+
+    '<div class="mcard-body">'+
+    '<div class="mcard-title">'+m.title+'</div>'+
+    '<div class="mcard-meta">'+m.year+'</div>'+
+    '<button class="mcard-btn" onclick="event.stopPropagation();openMovieDetail(\''+safeId+'\')">'+
+    (m.action ? '🎟 Comprar boletos' : '🎬 Ver más')+
+    '</button>'+
+    '</div></div>';
+}
+
+// Build initial grid
+document.getElementById('movieGrid').innerHTML = MOVIES.map(buildCard).join('');
+
+function filterCat(btn, cat){
+  document.querySelectorAll('.fpill').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  var grid = document.getElementById('movieGrid');
+  var filtered = cat === 'all' ? MOVIES : MOVIES.filter(function(m){return m.genre===cat});
+  // skeleton first
+  grid.innerHTML = filtered.map(function(){
+    return '<div class="skel-card"><div class="skel skel-img"></div><div class="skel skel-t1"></div><div class="skel skel-t2"></div></div>';
+  }).join('');
+  setTimeout(function(){
+    grid.innerHTML = filtered.map(buildCard).join('');
+    observeCards();
+  }, 400);
+}
+
+// Scroll animations
+function observeCards(){
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');}});
+  },{threshold:.1});
+  document.querySelectorAll('.fade-in').forEach(function(el){obs.observe(el);});
+}
+observeCards();
+
+// ─── STATE ───
+var sel=[],combo=null,sub=null;
+var SK='jcinemax_occupied_seats',RK='jcinemax_reservations';
+
+// ─── ALMACENAMIENTO EN LA NUBE (Supabase - cross-dispositivo) ───
+var SB_URL='https://lztbmgewfgvsunaesovh.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6dGJtZ2V3Zmd2c3VuYWVzb3ZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczMTcwMjQsImV4cCI6MjA5Mjg5MzAyNH0.ubQxkZQyT-0RGOibGGAnxQmRCTCzx83e0tWo8D70op0';
+var SB_H={'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+var _cacheReservas=null,_cacheOcc=null;
+function getReservas(){return _cacheReservas||[];}
+function getOcc(){return _cacheOcc||[];}
+
+async function syncFromCloud(){
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/reservas?select=*&order=created_at.asc',{headers:SB_H});
+    var text=await r.text();
+    var data=JSON.parse(text);
+    if(Array.isArray(data)&&data.length>0){
+      _cacheReservas=data.map(function(x){
+        return{name:x.name,phone:x.phone,email:x.email,seats:x.seats||[],
+          combo:x.combo,code:x.code,movie:x.movie,status:x.status,date:x.date,
+          purchaseDate:x.purchase_date,showDate:x.show_date,showTime:x.show_time,
+          sala:x.sala,rating:x.rating,seatCount:x.seat_count,ingressTime:x.ingress_time,_id:x.id};
+      });
+      var seats=[];
+      _cacheReservas.forEach(function(x){(x.seats||[]).forEach(function(s){if(!seats.includes(s))seats.push(s);});});
+      _cacheOcc=seats;
+    }else if(Array.isArray(data)&&data.length===0){
+      _cacheReservas=[];_cacheOcc=[];
+    }
+  }catch(e){console.error('sync error',e);_cacheReservas=_cacheReservas||[];_cacheOcc=_cacheOcc||[];}
+  _applyOccList(_cacheOcc);
+}
+
+async function saveReservationCloud(reservation){
+  try{
+    await fetch(SB_URL+'/rest/v1/reservas',{
+      method:'POST',
+      headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}),
+      body:JSON.stringify({
+        name:reservation.name,phone:reservation.phone,email:reservation.email,
+        seats:reservation.seats,combo:reservation.combo,code:reservation.code,
+        movie:reservation.movie,status:reservation.status||'pending',date:reservation.date,
+        purchase_date:reservation.purchaseDate,show_date:reservation.showDate,
+        show_time:reservation.showTime,sala:reservation.sala,rating:reservation.rating,
+        seat_count:reservation.seatCount,ingress_time:reservation.ingressTime||null
+      })
+    });
+    await syncFromCloud();
+  }catch(e){console.warn('save error',e);}
+}
+
+async function saveSeatsCloud(newSeats){}
+async function setReservas(arr){_cacheReservas=arr;}
+async function setOcc(arr){_cacheOcc=arr;}
+function saveOcc(s){saveSeatsCloud(s);}
+
+// Inicializar al arrancar
+syncFromCloud();
+
+function _applyOccList(o){
+  document.querySelectorAll('.seat').forEach(function(el){
+    var id=el.getAttribute('data-seat'),ic=el.querySelector('.si');
+    if(o.includes(id)&&!sel.includes(id)){
+      el.classList.add('occupied');el.classList.remove('selected');
+      if(ic)ic.textContent='❌';
+    }else if(!o.includes(id)){
+      el.classList.remove('occupied');
+      if(ic&&!el.classList.contains('selected'))ic.textContent=el.classList.contains('seat-vip')?'🛏️':'🛋';
+    }
+  });
+}
+// applyOcc sincroniza desde la nube y luego actualiza UI
+async function applyOcc(){await syncFromCloud();}
+
+// ─── TRAILER ───
+function scrollCombos(e){
+  if(e)e.preventDefault();
+  showPg('pg-home');
+  setTimeout(function(){
+    var el=document.getElementById('combos-section');
+    if(el)el.scrollIntoView({behavior:'smooth'});
+  },150);
+}
+function openTmod(){
+  var modal=document.getElementById('tmodal');
+  var iframe=document.getElementById('tframe');
+  iframe.src='';
+  modal.style.display='flex';
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(function(){
+    iframe.src='https://www.youtube.com/embed/PV6kfoIIjTQ?autoplay=1&rel=0&modestbranding=1';
+  },100);
+}
+function closeTmod(){
+  var modal=document.getElementById('tmodal');
+  modal.classList.remove('open');
+  modal.style.display='none';
+  document.getElementById('tframe').src='';
+  document.body.style.overflow='';
+}
+function handleTmod(e){if(e.target===document.getElementById('tmodal'))closeTmod();}
+
+// ─── PAGES ───
+function showPg(id){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('on');});
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function backHome(e){if(e)e.preventDefault();showPg('pg-home');}
+function scrollCart(e){if(e)e.preventDefault();showPg('pg-home');setTimeout(function(){document.getElementById('cartelera').scrollIntoView({behavior:'smooth'});},150);}
+function goSeats(e,movieTitle){
+  if(e)e.preventDefault();
+  if(movieTitle){
+    CURRENT_MOVIE=movieTitle;
+    showPg('pg-seats');applyOcc();
+  } else {
+    // Show movie selection page - only cartelera movies
+    buildMovieSelect();
+    showPg('pg-movie-select');
+  }
+}
+function buildMovieSelect(){
+  var grid=document.getElementById('movieSelectGrid');
+  var selectable=MOVIES.filter(function(m){return m.action;});
+  grid.innerHTML=selectable.map(function(m){
+    var safeId=m.id.replace(/'/g,"\\'");
+    return '<div class="msel-card" onclick="selectMovieAndGo(\''+safeId+'\')">'+
+      '<img src="'+m.img+'" alt="'+m.title+'" onerror="this.style.background=\'#dde4f5\'">'+
+      '<div class="msel-card-body"><div class="msel-card-title">'+m.title+'</div></div>'+
+      '</div>';
+  }).join('');
+}
+function selectMovieAndGo(movieId){
+  var m=MOVIES.find(function(x){return x.id===movieId;});
+  if(!m)return;
+  CURRENT_MOVIE=m.title;
+  showPg('pg-seats');applyOcc();
+}function goToCombo(){if(sel.length===0)return;showPg('pg-combo');}
+function goToForm(){
+  if(!combo)return;
+  document.getElementById('formSeatLabel').textContent=sel.join(', ');
+  document.getElementById('formMovieLabel').textContent=CURRENT_MOVIE;
+  var cl={basic:'Básico',duo:'Dúo',premium:'Premium VIP'};
+  document.getElementById('formComboLabel').textContent=combo==='later'?'Al llegar al cine':('En cine · '+(cl[sub]||''));
+  showPg('pg-form');
+}
+
+// ─── MOVIE DETAIL MODAL ───
+var CURRENT_MODAL_MOVIE=null;
+function openMovieDetail(movieId){
+  var m=MOVIES.find(function(x){return x.id===movieId;});
+  if(!m)return;
+  CURRENT_MODAL_MOVIE=m;
+  document.getElementById('mmodPoster').src=m.img||'';
+  document.getElementById('mmodPoster').alt=m.title;
+  document.getElementById('mmodBadge').innerHTML='<span class="mcard-badge '+m.badge+'" style="position:static;display:inline-block">'+m.label+'</span>';
+  document.getElementById('mmodTitle').textContent=m.title;
+  document.getElementById('mmodOrig').textContent=m.orig?'Nombre original: '+m.orig:'';
+  document.getElementById('mmodSynopsis').textContent=m.synopsis||'';
+  document.getElementById('mmodYear').textContent=m.year||'—';
+  document.getElementById('mmodGenre').textContent=(m.genre||'').charAt(0).toUpperCase()+(m.genre||'').slice(1);
+  document.getElementById('mmodRelease').textContent=m.release||'—';
+  document.getElementById('mmodCountry').textContent=m.country||'—';
+  document.getElementById('mmodDuration').textContent=m.duration||'—';
+  document.getElementById('mmodRating').textContent=m.rating||'—';
+  // Show trailer button only if has trailer
+  document.getElementById('mmodTrailerBtn').style.display=m.trailer?'flex':'none';
+  // Show reserve CTA only for bookable movies
+  document.getElementById('mmodCTA').style.display=m.action?'flex':'none';
+  var modal=document.getElementById('movieModal');
+  modal.style.display='flex';
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMovieMod(){
+  var modal=document.getElementById('movieModal');
+  modal.classList.remove('open');
+  modal.style.display='none';
+  document.body.style.overflow='';
+  CURRENT_MODAL_MOVIE=null;
+}
+function handleMovieMod(e){if(e.target===document.getElementById('movieModal'))closeMovieMod();}
+function openMovieTrailer(){
+  if(!CURRENT_MODAL_MOVIE||!CURRENT_MODAL_MOVIE.trailer)return;
+  var trailerUrl=CURRENT_MODAL_MOVIE.trailer;
+  closeMovieMod();
+  setTimeout(function(){
+    var iframe=document.getElementById('tframe');
+    iframe.src='';
+    var modal=document.getElementById('tmodal');
+    modal.style.display='flex';
+    modal.classList.add('open');
+    document.body.style.overflow='hidden';
+    setTimeout(function(){iframe.src=trailerUrl;},100);
+  },200);
+}
+function reserveFromModal(){
+  if(!CURRENT_MODAL_MOVIE)return;
+  CURRENT_MOVIE=CURRENT_MODAL_MOVIE.title;
+  closeMovieMod();
+  setTimeout(function(){showPg('pg-seats');applyOcc();},200);
+}
+
+// ─── SEATS ───
+function selectSeat(el){
+  if(el.classList.contains('occupied'))return;
+  var id=el.getAttribute('data-seat'),ic=el.querySelector('.si'),vip=el.classList.contains('seat-vip');
+  if(el.classList.contains('selected')){
+    el.classList.remove('selected');if(ic)ic.textContent=vip?'🛏️':'🛋';
+    sel=sel.filter(function(s){return s!==id;});
+  }else{el.classList.add('selected');sel.push(id);}
+  updateSeatUI();
+}
+function updateSeatUI(){
+  var n=sel.length;
+  document.getElementById('seatCounter').textContent=n;
+  var nm={'1-I':'Mueble Izq.#1','2-I':'Mueble Izq.#2','3-I':'Mueble Izq.#3','1-D':'Mueble Der.#1','2-D':'Mueble Der.#2','3-D':'Mueble Der.#3','PREMIUM':'⭐ VIP Premium'};
+  document.getElementById('selectedSeatLabel').textContent=n===0?'Ninguno':n+' seleccionado'+(n>1?'s':'');
+  document.getElementById('selectedSeatsList').textContent=n?sel.map(function(s){return nm[s]||s;}).join(' · '):'';
+  document.getElementById('btnContinue').disabled=n===0;
+}
+
+// ─── COMBO ───
+function selCombo(c){
+  combo=c;sub=null;
+  document.getElementById('combo-now').classList.toggle('on',c==='now');
+  document.getElementById('combo-later').classList.toggle('on',c==='later');
+  document.getElementById('combo-submenu').style.display=c==='now'?'block':'none';
+  document.getElementById('btnComboNext').disabled=c!=='later';
+}
+function selSub(s){
+  sub=s;
+  ['basic','duo','premium'].forEach(function(id){document.getElementById('sub-'+id).classList.toggle('on',id===s);});
+  document.getElementById('btnComboNext').disabled=false;
+}
+
+// ─── FORM ───
+function submitForm(){
+  var nm=document.getElementById('inputName').value.trim();
+  var ph=document.getElementById('inputPhone').value.trim();
+  var em=document.getElementById('inputEmail').value.trim();
+  if(!nm||!ph||!em||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)||ph.length<7){document.getElementById('formError').style.display='block';return;}
+  document.getElementById('formError').style.display='none';
+  // Show loading screen for 5 seconds
+  showPg('pg-loading');
+  var bar=document.getElementById('loadingBar');
+  var progress=0;
+  var interval=setInterval(function(){
+    progress+=2;
+    bar.style.width=Math.min(progress,100)+'%';
+    if(progress>=100){
+      clearInterval(interval);
+      saveOcc(sel);
+      genTicket(nm,ph,em);
+      showPg('pg-ticket');
+    }
+  },100);
+}
+
+// ─── TICKET ───
+var CURRENT_MOVIE='SUPER MARIO GALAXY: LA PELÍCULA';
+function genTicket(nm,ph,em){
+  var movieData=MOVIES.find(function(m){return m.id===CURRENT_MOVIE;})||{rating:'7 Años'};
+  document.getElementById('ticketName').textContent=nm;
+  document.getElementById('ticketPhone').textContent=ph;
+  document.getElementById('ticketEmailField').textContent=em;
+  document.getElementById('ticketEmail').textContent='Compra confirmada para '+em;
+  document.getElementById('ticketMovie').innerHTML=CURRENT_MOVIE.replace(':',':<br>');
+  var cl={basic:'Básico (Gaseosa + Crispetas)',duo:'Dúo (2 bebidas + Crispetas)',premium:'Premium (Grande + 2 beb. + Nachos)'};
+  document.getElementById('ticketSeat').textContent=sel.join(' · ');
+  document.getElementById('ticketQty').textContent=sel.length;
+  document.getElementById('ticketRating').textContent=movieData.rating||'7 Años';
+  document.getElementById('ticketCombo').textContent=combo==='later'?'Al llegar al cine 🎬':(cl[sub]||'');
+  var now=new Date(),days=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],months=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var dateStr=days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear()+' '+now.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('ticketDate').textContent=dateStr;
+  document.getElementById('ticketFuncionDate').textContent=days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+  var code='JCMX-'+Math.random().toString(36).substr(2,6).toUpperCase();
+  document.getElementById('ticketCode').textContent=code;
+  // Generate QR Code
+  var qrDiv=document.getElementById('qrcode');
+  qrDiv.innerHTML='';
+  if(window.QRCode){
+    new QRCode(qrDiv,{text:code,width:180,height:180,correctLevel:QRCode.CorrectLevel.H});
+  }else{
+    qrDiv.innerHTML='<div style="width:180px;height:180px;background:#dde4f5;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--text3)">'+code+'</div>';
+  }
+  // Save reservation with full info
+  var reservationEntry={
+    name:nm,phone:ph,email:em,
+    seats:sel.slice(),
+    seatCount:sel.length,
+    combo:document.getElementById('ticketCombo').textContent,
+    code:code,
+    date:now.toISOString(),
+    purchaseDate:dateStr,
+    movie:CURRENT_MOVIE,
+    rating:movieData.rating||'7 Años',
+    showTime:'9:00 PM',
+    showDate:days[now.getDay()]+' '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear(),
+    sala:'Principal · IMAX',
+    status:'pending'
+  };
+  saveReservationCloud(reservationEntry);
+  saveSeatsCloud(sel.slice());
+}
+function restart(){
+  sel=[];combo=null;sub=null;
+  document.querySelectorAll('.seat.selected').forEach(function(s){s.classList.remove('selected');});
+  document.querySelectorAll('.seat:not(.occupied) .si').forEach(function(ic){ic.textContent=ic.closest('.seat-vip')?'🛏️':'🛋';});
+  document.getElementById('selectedSeatLabel').textContent='Ninguno';
+  document.getElementById('selectedSeatsList').textContent='';
+  document.getElementById('seatCounter').textContent='0';
+  document.getElementById('btnContinue').disabled=true;
+  ['combo-now','combo-later'].forEach(function(id){document.getElementById(id).classList.remove('on');});
+  document.getElementById('combo-submenu').style.display='none';
+  document.getElementById('btnComboNext').disabled=true;
+  document.getElementById('inputName').value='';document.getElementById('inputPhone').value='';document.getElementById('inputEmail').value='';
+  document.getElementById('formError').style.display='none';
+  showPg('pg-home');
+}
+
+// ─── MOBILE NAV ───
+function openMob(){document.getElementById('mobnav').classList.add('open');document.body.style.overflow='hidden';}
+function closeMob(){document.getElementById('mobnav').classList.remove('open');document.body.style.overflow='';}
+function closeMobOuter(e){if(e.target===document.getElementById('mobnav'))closeMob();}
+
+// ─── ESC ───
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){closeTmod();closeMovieMod();if(document.getElementById('adminOverlay').classList.contains('open'))closeAdmin();}
+});
+
+// ─── QR CODE LIBRARY (qrcode.js) ───
+(function(){
+  var s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+  document.head.appendChild(s);
+  // Also load html5-qrcode for scanning
+  var s2=document.createElement('script');
+  s2.src='https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+  document.head.appendChild(s2);
+})();
+
+// ─── QR SCANNER ───
+var _qrScanner=null;
+function openQrScanner(){
+  document.getElementById('qrScannerOverlay').classList.add('open');
+  document.getElementById('qrScannerOverlay').style.display='flex';
+  document.body.style.overflow='hidden';
+  setTimeout(function(){
+    if(window.Html5Qrcode){
+      try{
+        _qrScanner=new Html5Qrcode('qrReaderContainer');
+        _qrScanner.start(
+          {facingMode:'environment'},
+          {fps:10,qrbox:{width:220,height:220}},
+          function(decodedText){
+            _qrScanner.stop().catch(function(){});
+            processQrCode(decodedText);
+          },
+          function(){}
+        ).catch(function(err){
+          document.getElementById('qrReaderContainer').innerHTML='<div style="padding:1rem;text-align:center;color:var(--text3);font-size:.8rem">📷 Cámara no disponible.<br>Usa el campo manual.</div>';
+        });
+      }catch(e){
+        document.getElementById('qrReaderContainer').innerHTML='<div style="padding:1rem;text-align:center;color:var(--text3);font-size:.8rem">Usa el campo manual abajo.</div>';
+      }
+    }else{
+      document.getElementById('qrReaderContainer').innerHTML='<div style="padding:1rem;text-align:center;color:var(--text3);font-size:.8rem">📷 Ingresa el código manualmente.</div>';
+    }
+  },400);
+}
+function closeQrScanner(){
+  if(_qrScanner){try{_qrScanner.stop().catch(function(){});}catch(e){}  _qrScanner=null;}
+  document.getElementById('qrScannerOverlay').classList.remove('open');
+  document.getElementById('qrScannerOverlay').style.display='none';
+  document.getElementById('qrReaderContainer').innerHTML='';
+  document.body.style.overflow='';
+}
+function closeQrResult(){
+  document.getElementById('qrResultOverlay').classList.remove('open');
+  document.getElementById('qrResultOverlay').style.display='none';
+}
+async function processQrCode(code){
+  code=(code||'').trim().toUpperCase();
+  if(!code){alert('Código inválido');return;}
+  closeQrScanner();
+  await syncFromCloud();
+  var reservations=getReservas();
+  var reservation=reservations.find(function(r){return (r.code||'').toUpperCase()===code;});
+  if(!reservation){
+    document.getElementById('qrResultContent').innerHTML='<div style="text-align:center;padding:2rem"><div style="font-size:3rem;margin-bottom:1rem">❌</div><div style="font-size:1.1rem;font-weight:800;color:#ef4444;margin-bottom:.5rem">Ticket no encontrado</div><div style="font-size:.84rem;color:var(--text3)">El código QR '+esc(code)+' no corresponde a ninguna reserva.</div><button onclick="closeQrResult()" style="margin-top:1.5rem;background:var(--grad);color:#fff;border:none;border-radius:var(--r3);padding:.7rem 2rem;font-weight:700;cursor:pointer;font-family:Poppins,sans-serif">Cerrar</button></div>';
+    document.getElementById('qrResultOverlay').style.display='flex';
+    document.getElementById('qrResultOverlay').classList.add('open');
+    return;
+  }
+  // Check if already ingresado
+  var alreadyIn=reservation.status==='ingresado';
+  // Mark as ingresado
+  if(!alreadyIn){
+    reservation.status='ingresado';
+    reservation.ingressTime=new Date().toISOString();
+    if(reservation._id){
+      try{await fetch(SB_URL+'/rest/v1/reservas?id=eq.'+reservation._id,{
+        method:'PATCH',headers:Object.assign({},SB_H,{'Prefer':'return=minimal'}),
+        body:JSON.stringify({status:'ingresado',ingress_time:reservation.ingressTime})
+      });}catch(e){}
+    }
+    await syncFromCloud();
+  }
+  // Show result
+  var seats=(reservation.seats||[]).map(function(s){return'<span class="abdg s">'+esc(s)+'</span>';}).join(' ');
+  var statusHtml=alreadyIn?
+    '<div style="background:#fef9c3;border:1px solid #fcd34d;border-radius:12px;padding:.75rem 1rem;margin-bottom:1rem;color:#92400e;font-weight:700;font-size:.85rem">⚠️ Este ticket ya fue escaneado anteriormente</div>':
+    '<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:.75rem 1rem;margin-bottom:1rem;color:#16a34a;font-weight:700;font-size:.85rem">✅ ¡Ingreso registrado exitosamente!</div>';
+  document.getElementById('qrResultContent').innerHTML=
+    '<div style="font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:1rem">🎟 Ticket Verificado</div>'+
+    statusHtml+
+    '<div style="background:#eaedfa;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #c8d0ed">'+
+      '<div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:.6rem">👤 Datos del comprador</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .75rem">'+
+        '<div><div style="font-size:.62rem;color:var(--text3)">Nombre</div><div style="font-size:.85rem;font-weight:700;color:var(--text)">'+esc(reservation.name)+'</div></div>'+
+        '<div><div style="font-size:.62rem;color:var(--text3)">Teléfono</div><div style="font-size:.85rem;font-weight:700;color:var(--text)">'+esc(reservation.phone||'—')+'</div></div>'+
+        '<div style="grid-column:1/-1"><div style="font-size:.62rem;color:var(--text3)">Correo</div><div style="font-size:.82rem;font-weight:600;color:var(--text);word-break:break-all">'+esc(reservation.email)+'</div></div>'+
+        '<div style="grid-column:1/-1"><div style="font-size:.62rem;color:var(--text3)">Fecha de compra</div><div style="font-size:.82rem;font-weight:600;color:var(--text)">'+esc(reservation.purchaseDate||reservation.date||'—')+'</div></div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="background:#f0fdf4;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #86efac">'+
+      '<div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#16a34a;margin-bottom:.6rem">🎬 Información de boletas</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .75rem">'+
+        '<div><div style="font-size:.62rem;color:var(--text3)">Clasificación</div><div style="font-size:.85rem;font-weight:700;color:var(--text)">'+esc(reservation.rating||'7 Años')+'</div></div>'+
+        '<div><div style="font-size:.62rem;color:var(--text3)">Hora función</div><div style="font-size:.85rem;font-weight:700;color:var(--text)">'+esc(reservation.showTime||'9:00 PM')+'</div></div>'+
+        '<div><div style="font-size:.62rem;color:var(--text3)">Fecha función</div><div style="font-size:.82rem;font-weight:600;color:var(--text)">'+esc(reservation.showDate||'—')+'</div></div>'+
+        '<div><div style="font-size:.62rem;color:var(--text3)">Sala</div><div style="font-size:.82rem;font-weight:600;color:var(--text)">'+esc(reservation.sala||'Principal · IMAX')+'</div></div>'+
+        '<div style="grid-column:1/-1"><div style="font-size:.62rem;color:var(--text3)">Cantidad de boletas</div><div style="font-size:.85rem;font-weight:700;color:var(--pu)">'+esc(String(reservation.seatCount||reservation.seats&&reservation.seats.length||1))+' boleta(s)</div></div>'+
+        '<div style="grid-column:1/-1"><div style="font-size:.62rem;color:var(--text3)">Ubicaciones</div><div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.2rem">'+seats+'</div></div>'+
+        '<div style="grid-column:1/-1"><div style="font-size:.62rem;color:var(--text3)">Combo</div><div style="font-size:.82rem;font-weight:600;color:var(--text)">'+esc(reservation.combo||'—')+'</div></div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="text-align:center"><div style="font-family:monospace;font-size:.8rem;color:var(--text3);letter-spacing:2px;margin-bottom:1rem">'+esc(code)+'</div>'+
+    '<button onclick="closeQrResult();adminLoad()" style="background:var(--grad);color:#fff;border:none;border-radius:var(--r3);padding:.7rem 2rem;font-weight:700;cursor:pointer;font-family:Poppins,sans-serif;font-size:.85rem">✓ Listo</button></div>';
+  document.getElementById('qrResultOverlay').style.display='flex';
+  document.getElementById('qrResultOverlay').classList.add('open');
+  // Refresh admin table
+  adminLoad();
+}
+
+// ─── ADMIN ───
+var AU='cinecol25',AP='CineCol25';
+function openAdmin(){
+  document.getElementById('adminOverlay').classList.add('open');
+  document.getElementById('adminLogin').style.display='flex';
+  document.getElementById('adminPanel2').classList.remove('open');
+  document.body.style.overflow='hidden';
+  setTimeout(function(){document.getElementById('aUser').focus();},150);
+}
+function closeAdmin(){
+  document.getElementById('adminOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  document.getElementById('aUser').value='';document.getElementById('aPass').value='';
+  document.getElementById('aLoginErr').style.display='none';
+}
+function doAdminLogin(){
+  var u=document.getElementById('aUser').value.trim(),p=document.getElementById('aPass').value;
+  if(u===AU&&p===AP){
+    document.getElementById('adminLogin').style.display='none';
+    document.getElementById('adminPanel2').classList.add('open');
+    adminLoad();
+  }else{
+    document.getElementById('aLoginErr').style.display='block';
+    document.getElementById('aPass').value='';document.getElementById('aPass').focus();
+    setTimeout(function(){document.getElementById('aLoginErr').style.display='none';},3500);
+  }
+}
+function adminLogout(){document.getElementById('adminPanel2').classList.remove('open');document.getElementById('adminLogin').style.display='flex';document.getElementById('aUser').value='';document.getElementById('aPass').value='';}
+
+// Async helpers (compatibilidad)
+function getReservationsAsync(){return Promise.resolve(getReservas());}
+function getOccAsync(){return Promise.resolve(getOcc());}
+function saveReservationsAsync(r){return setReservas(r);}
+async function adminLoad(){
+  var c=document.getElementById('atblc');
+  if(c)c.innerHTML='<div class="aempty"><span class="aempty-i">⏳</span>Cargando reservas...</div>';
+  await syncFromCloud();
+  var AALL=['1-I','2-I','3-I','PREMIUM','1-D','2-D','3-D'];
+  var r=getReservas();
+  var o=getOcc();
+  document.getElementById('as1').textContent=r.length;
+  document.getElementById('as2').textContent=o.length;
+  document.getElementById('as3').textContent=Math.max(0,AALL.length-o.length);
+  if(r.length){var d=new Date(r[r.length-1].date),dy=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];document.getElementById('as4').textContent=dy[d.getDay()]+' '+d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});}
+  else document.getElementById('as4').textContent='—';
+  adminMap(o);adminTable(r);
+}
+function adminMap(o){
+  var AALL=['1-I','2-I','3-I','PREMIUM','1-D','2-D','3-D'];
+  function s(id){var x=o.includes(id);return'<div class="asm-seat'+(x?' occ':'')+'"><span>'+(x?'❌':'🛋')+'</span><span>'+id+'</span></div>';}
+  function v(id){var x=o.includes(id);return'<div class="asm-vip'+(x?' occ':'')+'"><span>'+(x?'❌':'⭐')+'</span><span style="font-size:.5rem">'+id+'</span></div>';}
+  document.getElementById('asmapbody').innerHTML=
+    '<div class="asm-col"><div class="asm-lbl">Mueble Izq.</div>'+s('1-I')+s('2-I')+s('3-I')+'</div>'+
+    '<div class="asm-col" style="padding-top:16px"><div class="asm-lbl">VIP</div>'+v('PREMIUM')+'</div>'+
+    '<div class="asm-col"><div class="asm-lbl">Mueble Der.</div>'+s('1-D')+s('2-D')+s('3-D')+'</div>'+
+    '<div class="asm-leg"><span>🛋 Libre</span><span>❌ Ocupado</span><span style="color:var(--pu);font-weight:700">'+o.length+'/'+AALL.length+' ocupados</span></div>';
+}
+function adminLoadSeats(o){adminMap(o);}
+function adminTable(r){
+  var c=document.getElementById('atblc');
+  if(!r.length){c.innerHTML='<div class="aempty"><span class="aempty-i">📭</span>No hay reservas aún</div>';return;}
+  var rows=r.slice().reverse().map(function(x,i){
+    var ri=r.length-1-i,d=new Date(x.date);
+    var ds=d.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('es-CO',{hour:'2-digit',minute:'2-digit'});
+    var seats=(x.seats||[]).map(function(s){return'<span class="abdg s">'+esc(s)+'</span>';}).join(' ');
+    var isIngresado=x.status==='ingresado';
+    var statusBadge=isIngresado?
+      '<span class="status-badge status-ingresado">✅ Ingresado</span>':
+      '<span class="status-badge status-pendiente">⏳ No ha llegado</span>';
+    var phone=x.phone?esc(x.phone):'—';
+    return'<tr class="at-desktop-row"><td><strong>'+esc(x.name)+'</strong><br><span style="font-size:.7rem;color:var(--text3)">'+phone+'</span></td><td style="font-size:.75rem">'+esc(x.email)+'</td><td>'+seats+'</td><td><span class="abdg c">'+esc(x.combo||'—')+'</span></td><td><span class="acode">'+esc(x.code||'—')+'</span></td><td>'+ds+'</td><td>'+statusBadge+'</td><td><button class="abtn dn" onclick="adminDel('+ri+')">Eliminar</button></td></tr>'+
+    '<div class="at-mobile-card">'+
+      '<div class="at-mc-header"><strong>'+esc(x.name)+'</strong>'+statusBadge+'<button class="abtn dn" onclick="adminDel('+ri+')">🗑️</button></div>'+
+      '<div class="at-mc-row"><span class="at-mc-lbl">📱 Teléfono</span><span>'+phone+'</span></div>'+
+      '<div class="at-mc-row"><span class="at-mc-lbl">📧 Correo</span><span>'+esc(x.email)+'</span></div>'+
+      '<div class="at-mc-row"><span class="at-mc-lbl">🛋 Asientos</span><span>'+seats+'</span></div>'+
+      '<div class="at-mc-row"><span class="at-mc-lbl">🍿 Combo</span><span class="abdg c">'+esc(x.combo||'—')+'</span></div>'+
+      '<div class="at-mc-row"><span class="at-mc-lbl">🎫 Código</span><span class="acode">'+esc(x.code||'—')+'</span></div>'+
+      '<div class="at-mc-row"><span class="at-mc-lbl">📅 Fecha compra</span><span>'+ds+'</span></div>'+
+    '</div>';
+  }).join('');
+  c.innerHTML='<table class="at"><thead><tr><th>Nombre / Tel.</th><th>Correo</th><th>Asientos</th><th>Combo</th><th>Código</th><th>Fecha</th><th>Estado</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
+}
+async function adminDel(i){
+  if(!confirm('¿Eliminar esta reserva?'))return;
+  var r=getReservas();
+  var entry=r[i];
+  if(entry&&entry._id){
+    try{await fetch(SB_URL+'/rest/v1/reservas?id=eq.'+entry._id,{method:'DELETE',headers:SB_H});}catch(e){}
+  }
+  adminLoad();
+  applyOcc();
+}
+async function adminClear(){
+  if(!confirm('⚠️ ¿Eliminar TODAS las reservas?'))return;
+  try{await fetch(SB_URL+'/rest/v1/reservas?id=neq.00000000-0000-0000-0000-000000000000',{method:'DELETE',headers:SB_H});}catch(e){}
+  _cacheReservas=[];_cacheOcc=[];
+  adminLoad();
+  applyOcc();
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+document.getElementById('aUser').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('aPass').focus();});
+document.getElementById('aPass').addEventListener('keydown',function(e){if(e.key==='Enter')doAdminLogin();});
+
+// PC: escribir "admin"
+var _kb='';
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  _kb+=e.key.toLowerCase();if(_kb.length>6)_kb=_kb.slice(-6);
+  if(_kb.includes('admin')){_kb='';openAdmin();}
+});
+// Móvil: 5 toques en 🎬
+(function(){
+  var taps=0,timer=null,el=document.getElementById('secretTap');
+  function onTap(){
+    taps++;el.style.background='rgba(20,56,166,.15)';
+    setTimeout(function(){el.style.background='';},200);
+    if(taps>=5){taps=0;clearTimeout(timer);openAdmin();return;}
+    clearTimeout(timer);timer=setTimeout(function(){taps=0;},1800);
+  }
+  el.addEventListener('click',onTap);
+  el.addEventListener('touchend',function(e){e.preventDefault();onTap();});
+})();
+
+applyOcc();
+// Refrescar asientos cada 15s, pero NO si el admin está abierto
+setInterval(function(){
+  if(!document.getElementById('adminOverlay').classList.contains('open')){
+    applyOcc();
+  }
+}, 15000);
+
+// ─── HERO CAROUSEL ───
+(function(){
+  var cur=0,total=6,timer=null,track=document.getElementById('heroTrack');
+  var dots=document.querySelectorAll('.cdot');
+  function go(n){
+    cur=(n+total)%total;
+    track.style.transform='translateX(-'+cur*100+'%)';
+    dots.forEach(function(d,i){d.classList.toggle('on',i===cur);});
+    resetTimer();
+  }
+  function resetTimer(){
+    clearInterval(timer);
+    timer=setInterval(function(){go(cur+1);},5000);
+  }
+  window.caroMove=function(d){go(cur+d);};
+  window.caroGo=function(n){go(n);};
+  // Pause on hover
+  var carousel=document.getElementById('heroCarousel');
+  carousel.addEventListener('mouseenter',function(){clearInterval(timer);});
+  carousel.addEventListener('mouseleave',function(){resetTimer();});
+  // Touch swipe
+  var sx=0;
+  carousel.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+  carousel.addEventListener('touchend',function(e){
+    var dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>40)go(cur+(dx<0?1:-1));
+  },{passive:true});
+  resetTimer();
+})();
+
+// ════════════════════════════════════════════════════
+// PARALLAX & CINEMATIC SCROLL ENGINE
+// Professional Apple/Nike level scroll animations
+// ════════════════════════════════════════════════════
+(function(){
+  'use strict';
+
+  // ── 1. SCROLL PROGRESS BAR ──
+  var prog = document.getElementById('scroll-progress');
+  function updateProgress(){
+    var scrolled = window.scrollY;
+    var total = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = total > 0 ? (scrolled / total * 100) : 0;
+    prog.style.width = pct + '%';
+  }
+
+  // ── 2. NAVBAR SCROLL EFFECT ──
+  var navbar = document.querySelector('.navbar');
+  var lastScroll = 0;
+  var navHideTimer = null;
+  function updateNavbar(){
+    var sy = window.scrollY;
+    if(sy > 60){
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+    lastScroll = sy;
+  }
+
+  // ── 3. FLOATING PARTICLES ──
+  var pContainer = document.getElementById('parallax-particles');
+  var particleData = [
+    {w:320,h:320,top:10,left:5,dur:22,delay:0,x1:'40px',y1:'-30px',x2:'-25px',y2:'20px',x3:'15px',y3:'-40px'},
+    {w:180,h:180,top:30,left:70,dur:18,delay:3,x1:'-30px',y1:'25px',x2:'20px',y2:'-15px',x3:'-10px',y3:'30px'},
+    {w:250,h:250,top:60,left:85,dur:25,delay:1,x1:'20px',y1:'35px',x2:'-35px',y2:'-20px',x3:'25px',y3:'10px'},
+    {w:140,h:140,top:80,left:20,dur:20,delay:5,x1:'-20px',y1:'-25px',x2:'30px',y2:'10px',x3:'-15px',y3:'25px'},
+    {w:200,h:200,top:45,left:45,dur:28,delay:2,x1:'35px',y1:'15px',x2:'-20px',y2:'-30px',x3:'10px',y3:'20px'},
+  ];
+  particleData.forEach(function(p){
+    var el = document.createElement('div');
+    el.className = 'particle';
+    el.style.cssText = 'width:'+p.w+'px;height:'+p.h+'px;top:'+p.top+'%;left:'+p.left+'%;'
+      +'--dur:'+p.dur+'s;--delay:'+p.delay+'s;'
+      +'--x1:'+p.x1+';--y1:'+p.y1+';'
+      +'--x2:'+p.x2+';--y2:'+p.y2+';'
+      +'--x3:'+p.x3+';--y3:'+p.y3+';';
+    pContainer.appendChild(el);
+  });
+
+  // ── 4. INTERSECTION OBSERVER (reveal animations) ──
+  var revealEls = [];
+  function collectRevealEls(){
+    revealEls = Array.from(document.querySelectorAll(
+      '.reveal-up,.reveal-left,.reveal-right,.reveal-scale,.stagger-children,.sec-head,.parallax-img-wrap'
+    ));
+  }
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var el = entry.target;
+        el.classList.add('is-visible');
+        // sec-head underline
+        if(el.classList.contains('sec-head')){
+          el.classList.add('is-visible');
+        }
+        observer.unobserve(el);
+      }
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+
+  function initObserver(){
+    collectRevealEls();
+    revealEls.forEach(function(el){ observer.observe(el); });
+    // Also observe sec-heads for underline animation
+    document.querySelectorAll('.sec-head').forEach(function(el){
+      observer.observe(el);
+    });
+  }
+
+  // ── 5. PARALLAX HERO IMAGE (scroll-based) ──
+  var heroCarousel = document.getElementById('heroCarousel');
+  var heroImgs = [];
+  function collectHeroImgs(){
+    heroImgs = Array.from(document.querySelectorAll('.hero-slide-right img'));
+  }
+
+  // ── 6. PARALLAX PROMO BANNERS ──
+  var promoBanners = [];
+  function collectBanners(){
+    promoBanners = Array.from(document.querySelectorAll('.promo-banner'));
+  }
+
+  // ── 7. CARD 3D TILT (mouse move on cards) ──
+  function initCardTilt(){
+    document.querySelectorAll('.mcard, .fcard').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var rect = card.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dx = (e.clientX - cx) / (rect.width / 2);
+        var dy = (e.clientY - cy) / (rect.height / 2);
+        var maxTilt = 8;
+        var rx = -dy * maxTilt;
+        var ry = dx * maxTilt;
+        card.style.transform = 'perspective(800px) rotateX('+rx+'deg) rotateY('+ry+'deg) translateY(-6px) scale(1.02)';
+        card.style.boxShadow = '0 20px 60px rgba(20,56,166,.28), '
+          +(ry > 0 ? '-' : '')+'8px 8px 20px rgba(20,56,166,.12)';
+        // cursor spotlight
+        var mx = ((e.clientX - rect.left) / rect.width * 100) + '%';
+        var my = ((e.clientY - rect.top) / rect.height * 100) + '%';
+        card.style.setProperty('--mx', mx);
+        card.style.setProperty('--my', my);
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.transform = '';
+        card.style.boxShadow = '';
+      });
+    });
+  }
+
+  // ── 8. MAGNETIC BUTTONS ──
+  function initMagnetic(){
+    document.querySelectorAll('.btn-hero,.btn-hero2,.pb-btn,.fcard-btn').forEach(function(btn){
+      btn.addEventListener('mousemove', function(e){
+        var rect = btn.getBoundingClientRect();
+        var dx = (e.clientX - (rect.left + rect.width/2)) * 0.3;
+        var dy = (e.clientY - (rect.top + rect.height/2)) * 0.3;
+        btn.style.transform = 'translate('+dx+'px,'+dy+'px) scale(1.04)';
+      });
+      btn.addEventListener('mouseleave', function(){
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // ── 9. SCROLL-BASED PARALLAX (rAF loop) ──
+  var ticking = false;
+  var scrollY = 0;
+
+  function onScroll(){
+    scrollY = window.scrollY;
+    if(!ticking){
+      requestAnimationFrame(renderParallax);
+      ticking = true;
+    }
+  }
+
+  function renderParallax(){
+    ticking = false;
+
+    // Scroll progress
+    updateProgress();
+
+    // Navbar
+    updateNavbar();
+
+    // Hero image parallax
+    if(heroCarousel){
+      var heroRect = heroCarousel.getBoundingClientRect();
+      var heroVisible = heroRect.bottom > 0 && heroRect.top < window.innerHeight;
+      if(heroVisible){
+        var heroProgress = -heroRect.top / heroRect.height;
+        heroImgs.forEach(function(img){
+          var shift = heroProgress * 40;
+          img.style.transform = 'scale(1.12) translateY('+shift+'px)';
+        });
+      }
+    }
+
+    // Promo banners parallax
+    promoBanners.forEach(function(banner){
+      var r = banner.getBoundingClientRect();
+      if(r.bottom > 0 && r.top < window.innerHeight){
+        var progress = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+        var shift = (progress - .5) * 30;
+        var orbs = banner.querySelectorAll('.pb-bg-orb');
+        orbs.forEach(function(orb, i){
+          orb.style.transform = 'translate('+(shift*(i%2===0?1:-1))+'px,'+(-shift*.5)+'px)';
+        });
+      }
+    });
+  }
+
+  // ── 10. PARALLAX IMG WRAPS (general sections) ──
+  function initParallaxImgs(){
+    document.querySelectorAll('.parallax-img-wrap img').forEach(function(img){
+      // handled in rAF loop via IntersectionObserver visibility
+    });
+  }
+
+  // ── 11. RE-INIT ON PAGE CHANGE (SPA) ──
+  // Watch for page changes (the site uses .pg.on pattern)
+  var lastPage = '';
+  function watchPages(){
+    setInterval(function(){
+      var activePg = document.querySelector('.pg.on');
+      if(activePg && activePg.id !== lastPage){
+        lastPage = activePg.id;
+        setTimeout(function(){
+          initObserver();
+          initCardTilt();
+          initMagnetic();
+          collectHeroImgs();
+        }, 100);
+      }
+    }, 300);
+  }
+
+  // ── 12. HERO SLIDE CHANGE ANIMATION ──
+  // Override the carousel go() to reset hero content animations
+  var _origCaroGo = window.caroGo;
+  window.caroGo = function(n){
+    if(_origCaroGo) _origCaroGo(n);
+    // Re-trigger hero entrance animations
+    document.querySelectorAll('.hero-slide-left .hero-badge,.hero-slide-left .hero-title,.hero-slide-left .hero-desc,.hero-slide-left .hero-btns').forEach(function(el){
+      el.style.animation = 'none';
+      el.offsetHeight; // reflow
+      el.style.animation = '';
+    });
+  };
+
+  // ── 13. SMOOTH PARALLAX CARDS ON SCROLL ──
+  function initMovieGridParallax(){
+    // Stagger the movie grid cards as they appear
+    var grid = document.getElementById('movieGrid');
+    if(!grid) return;
+    var gridObserver = new MutationObserver(function(){
+      grid.querySelectorAll('.mcard').forEach(function(card, i){
+        if(!card._parallaxInit){
+          card._parallaxInit = true;
+          card.classList.add('reveal-up');
+          card.style.transitionDelay = Math.min(i * .05, .4) + 's';
+          gridObserver2.observe(card);
+        }
+      });
+    });
+    gridObserver.observe(grid, {childList:true});
+
+    var gridObserver2 = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('is-visible');
+          gridObserver2.unobserve(e.target);
+        }
+      });
+    },{threshold:.1});
+  }
+
+  // ── INIT ──
+  function init(){
+    collectRevealEls();
+    collectHeroImgs();
+    collectBanners();
+    initObserver();
+    initCardTilt();
+    initMagnetic();
+    initMovieGridParallax();
+    watchPages();
+
+    // Add orbs to promo banners for parallax
+    promoBanners.forEach(function(banner){
+      for(var i=0;i<3;i++){
+        var orb = document.createElement('div');
+        orb.className = 'pb-bg-orb';
+        var size = [200,140,100][i];
+        var positions = [{top:'-40px',right:'-40px'},{bottom:'-60px',right:'60px'},{top:'20%',left:'10%'}][i];
+        orb.style.cssText = 'width:'+size+'px;height:'+size+'px;top:'+(positions.top||'auto')+';bottom:'+(positions.bottom||'auto')+';left:'+(positions.left||'auto')+';right:'+(positions.right||'auto')+';';
+        banner.appendChild(orb);
+      }
+    });
+
+    window.addEventListener('scroll', onScroll, {passive:true});
+    // Initial render
+    renderParallax();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+</body>
+</html>
